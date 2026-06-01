@@ -3,535 +3,811 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ARCADE</title>
+<title>ARCADE.GG</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0a0a0a;
-  --surface:#111;
-  --surface2:#181818;
-  --border:rgba(255,255,255,0.07);
-  --border2:rgba(255,255,255,0.12);
-  --text:#f0f0f0;
-  --muted:#555;
-  --muted2:#333;
-  --accent:#e8ff00;
-  --accent-dim:rgba(232,255,0,0.08);
-  --red:#ff4040;
-  --blue:#4080ff;
-  --green:#00e676;
-  --mono:'IBM Plex Mono',monospace;
-  --sans:'IBM Plex Sans',sans-serif;
+  --bg:#080810;
+  --s1:#0f0f1a;
+  --s2:#16162a;
+  --s3:#1e1e35;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.1);
+  --text:#eef0ff;
+  --muted:#5a5a80;
+  --muted2:#2a2a45;
+  --accent:#c8ff00;
+  --adim:rgba(200,255,0,0.07);
+  --p:#7c6dfa;
+  --pdim:rgba(124,109,250,0.1);
+  --red:#ff4d6a;
+  --blue:#4d9fff;
+  --green:#00e5a0;
+  --orange:#ff9500;
+  --mono:'Space Mono',monospace;
+  --sans:'Inter',sans-serif;
 }
-html,body{height:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+html,body{height:100%;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px}
 
 /* LAYOUT */
-.app{display:flex;min-height:100vh}
-.sidebar{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
-.main{flex:1;display:flex;flex-direction:column;min-width:0}
-.content{flex:1;padding:32px;max-width:900px}
-
-/* MOBILE */
-@media(max-width:700px){
-  .sidebar{display:none}
-  .content{padding:16px}
-  .bnav{display:flex!important}
-}
-@media(min-width:701px){.bnav{display:none!important}}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+@media(max-width:720px){.app{grid-template-columns:1fr}.sidebar{display:none!important}.bnav{display:flex!important}body{padding-bottom:60px}}
+@media(min-width:721px){.bnav{display:none!important}}
 
 /* SIDEBAR */
-.brand{padding:24px 20px 20px;font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:3px;color:var(--accent);border-bottom:1px solid var(--border)}
-.brand span{color:var(--muted);font-weight:400}
-.nav-section{padding:20px 12px 8px;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:500}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:400;color:var(--muted);transition:all .15s;margin-bottom:2px}
-.nav-item:hover{color:var(--text);background:var(--surface2)}
-.nav-item.on{color:var(--accent);background:var(--accent-dim)}
-.nav-item .icon{width:16px;height:16px;opacity:.6;flex-shrink:0}
-.nav-item.on .icon{opacity:1}
-.sidebar-bottom{margin-top:auto;padding:16px 12px;border-top:1px solid var(--border)}
-.gear-count{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
-.gear-count strong{color:var(--accent);font-size:14px}
+.sidebar{background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden}
+.brand{padding:24px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.brand-logo{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand-logo svg{width:18px;height:18px}
+.brand-text{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:2px;color:var(--text)}
+.brand-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.nav-group{padding:16px 12px 0}
+.nav-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted2);font-weight:700;padding:0 8px;margin-bottom:6px}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;color:var(--muted);transition:all .18s;margin-bottom:2px;position:relative}
+.ni:hover{color:var(--text);background:var(--s2)}
+.ni.on{color:var(--accent);background:var(--adim)}
+.ni svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ni span{font-size:13px;font-weight:400}
+.ni .dot{position:absolute;right:12px;width:6px;height:6px;border-radius:50%;background:var(--red)}
+.sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--border)}
+.gear-pill{display:flex;align-items:center;gap:8px;background:var(--adim);border:1px solid rgba(200,255,0,0.15);border-radius:20px;padding:8px 14px}
+.gear-pill svg{width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2}
+.gear-pill .val{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent)}
+.gear-pill .lbl{font-size:11px;color:var(--muted)}
 
-/* PAGES */
-.page{display:none}
+/* MAIN */
+.main{display:flex;flex-direction:column;min-width:0;overflow-x:hidden}
+.content{flex:1;padding:28px 32px;max-width:960px}
+@media(max-width:720px){.content{padding:16px}}
+
+/* TOP BAR mobile */
+.topbar{display:none;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(8,8,16,0.94);backdrop-filter:blur(12px);z-index:50}
+@media(max-width:720px){.topbar{display:flex}}
+.topbar-brand{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent);letter-spacing:2px}
+.topbar-gear{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent)}
+.topbar-gear svg{width:13px;height:13px;stroke:var(--accent);fill:none;stroke-width:2}
+
+/* PAGE */
+.page{display:none;animation:fadeUp .2s ease}
 .page.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* HEADER */
-.page-header{margin-bottom:28px}
-.page-title{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--muted);font-weight:500;margin-bottom:8px}
-.page-h1{font-size:22px;font-weight:500;color:var(--text)}
+/* PAGE HEADER */
+.ph{margin-bottom:24px}
+.ph-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:6px}
+.ph-title{font-size:22px;font-weight:600;color:var(--text);line-height:1.2}
+
+/* SECTION LABEL */
+.slabel{font-family:var(--mono);font-size:9px;letter-spacing:2.5px;color:var(--muted);font-weight:700;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* GAME GRID */
-.game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:28px}
-.gcard{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
-.gcard:hover{border-color:var(--border2);background:var(--surface2)}
-.gcard:active{transform:scale(.98)}
-.gcard-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);font-weight:500;margin-bottom:12px}
-.gcard-name{font-size:15px;font-weight:500;margin-bottom:6px}
-.gcard-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px}
-.gcard-bottom{display:flex;align-items:center;justify-content:space-between}
-.gcard-rew{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:700}
-.gcard-badge{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:3px 7px;border-radius:3px;font-weight:700}
-.badge-new{background:rgba(64,128,255,.15);color:var(--blue);border:1px solid rgba(64,128,255,.25)}
-.badge-hot{background:rgba(255,64,64,.12);color:var(--red);border:1px solid rgba(255,64,64,.2)}
-.section-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:500;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:6px}
+@media(max-width:500px){.ggrid{grid-template-columns:1fr 1fr}}
+
+/* GAME CARD */
+.gcard{background:var(--s1);border:1px solid var(--border);border-radius:12px;cursor:pointer;overflow:hidden;transition:transform .16s,border-color .16s,box-shadow .16s;position:relative}
+.gcard:hover{transform:translateY(-2px);border-color:var(--border2);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.gcard:active{transform:scale(.97)}
+.gcard-art{height:90px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.gcard-art svg{width:52px;height:52px;position:relative;z-index:1}
+.gcard-body{padding:12px 14px 14px}
+.gcard-tag{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.gcard-name{font-size:13px;font-weight:600;margin-bottom:3px;color:var(--text)}
+.gcard-desc{font-size:11px;color:var(--muted);line-height:1.45;margin-bottom:10px}
+.gcard-foot{display:flex;align-items:center;justify-content:space-between}
+.gcard-rew{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--accent)}
+.gbadge{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:2px 6px;border-radius:4px;font-weight:700}
+.gb-new{background:rgba(77,159,255,.15);color:var(--blue);border:1px solid rgba(77,159,255,.25)}
+.gb-hot{background:rgba(255,77,106,.12);color:var(--red);border:1px solid rgba(255,77,106,.22)}
+
+/* ART BACKGROUNDS */
+.art-reflex{background:radial-gradient(ellipse at 50% 80%,rgba(0,229,160,.12) 0%,transparent 70%),linear-gradient(180deg,#0a1a14 0%,#0d1f18 100%)}
+.art-stroop{background:radial-gradient(ellipse at 50% 80%,rgba(255,77,106,.1) 0%,transparent 70%),linear-gradient(180deg,#1a0a10 0%,#1f0d15 100%)}
+.art-tap{background:radial-gradient(ellipse at 50% 80%,rgba(200,255,0,.1) 0%,transparent 70%),linear-gradient(180deg,#121a00 0%,#161f00 100%)}
+.art-mine{background:radial-gradient(ellipse at 50% 80%,rgba(255,149,0,.1) 0%,transparent 70%),linear-gradient(180deg,#1a1000 0%,#1f1500 100%)}
+.art-blitz{background:radial-gradient(ellipse at 50% 80%,rgba(77,159,255,.1) 0%,transparent 70%),linear-gradient(180deg,#080f1a 0%,#0c1520 100%)}
+.art-seq{background:radial-gradient(ellipse at 50% 80%,rgba(124,109,250,.12) 0%,transparent 70%),linear-gradient(180deg,#0e0a1a 0%,#120d1f 100%)}
+.art-mem{background:radial-gradient(ellipse at 50% 80%,rgba(124,109,250,.1) 0%,transparent 70%),linear-gradient(180deg,#0e0a1a 0%,#130d20 100%)}
+.art-snake{background:radial-gradient(ellipse at 50% 80%,rgba(0,229,160,.12) 0%,transparent 70%),linear-gradient(180deg,#081408 0%,#0c1a0c 100%)}
+.art-wave{background:radial-gradient(ellipse at 50% 80%,rgba(77,159,255,.12) 0%,transparent 70%),linear-gradient(180deg,#080f1a 0%,#0d1522 100%)}
+.art-word{background:radial-gradient(ellipse at 50% 80%,rgba(255,77,106,.08) 0%,transparent 70%),linear-gradient(180deg,#1a0810 0%,#1f0c15 100%)}
+.art-dodge{background:radial-gradient(ellipse at 50% 80%,rgba(255,149,0,.12) 0%,transparent 70%),linear-gradient(180deg,#1a0e00 0%,#1f1200 100%)}
+.art-math{background:radial-gradient(ellipse at 50% 80%,rgba(0,229,160,.1) 0%,transparent 70%),linear-gradient(180deg,#081a10 0%,#0c1f15 100%)}
 
 /* OVERLAY */
-.ov{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;flex-direction:column;overflow:hidden}
-.ov.on{display:flex}
-.ov-bar{display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid var(--border);flex-shrink:0}
-.ov-back{display:flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--mono);font-size:12px;color:var(--muted);transition:color .15s;padding:6px 0}
-.ov-back:hover{color:var(--text)}
-.ov-back svg{width:14px;height:14px}
-.ov-title{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px}
-.ov-body{flex:1;overflow-y:auto;padding:24px;max-width:600px;margin:0 auto;width:100%}
+.ov{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;flex-direction:column}
+.ov.on{display:flex;animation:fadeUp .18s ease}
+.ov-bar{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--s1)}
+.ov-back{display:flex;align-items:center;gap:6px;cursor:pointer;font-family:var(--mono);font-size:11px;color:var(--muted);transition:.15s;padding:6px 10px;border-radius:6px;border:1px solid var(--border)}
+.ov-back:hover{color:var(--text);border-color:var(--border2)}
+.ov-back svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ov-htitle{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--text)}
+.ov-body{flex:1;overflow-y:auto;padding:20px;max-width:560px;margin:0 auto;width:100%}
+.ov-body::-webkit-scrollbar{width:2px}
+.ov-body::-webkit-scrollbar-thumb{background:var(--s3)}
 
-/* STAT ROW */
-.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px}
-.stat-cell{background:var(--surface);padding:16px;text-align:center}
-.stat-val{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px}
-.stat-lbl{font-size:11px;color:var(--muted)}
-
-/* LEADERBOARD */
-.lb{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}
-.lb-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)}
-.lb-row:last-child{border-bottom:none}
-.lb-row.me{background:var(--accent-dim)}
-.lb-num{font-family:var(--mono);font-size:11px;color:var(--muted);width:20px;text-align:right;flex-shrink:0}
-.lb-av{width:28px;height:28px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden}
-.lb-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.lb-name{flex:1;font-size:13px;color:var(--text)}
-.lb-me-tag{font-family:var(--mono);font-size:9px;color:var(--accent);margin-left:6px}
-.lb-sc{font-family:var(--mono);font-size:12px;color:var(--muted)}
-
-/* GAME UI */
-.game-area{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:14px;overflow:hidden}
-.btn-row{display:grid;gap:8px;margin-bottom:10px}
-.btn-row.cols2{grid-template-columns:1fr 1fr}
-.btn{padding:12px 20px;border-radius:6px;font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);transition:all .15s;width:100%}
-.btn:hover{border-color:rgba(255,255,255,.2)}
-.btn:active{transform:scale(.98)}
+/* BUTTONS */
+.btn{width:100%;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;border:1px solid var(--border2);background:var(--s2);color:var(--text);transition:all .15s;line-height:1}
+.btn:hover{border-color:rgba(255,255,255,.18);background:var(--s3)}
+.btn:active{transform:scale(.97)}
 .btn.primary{background:var(--accent);color:#000;border-color:transparent;font-weight:600}
-.btn.primary:hover{opacity:.92}
-.btn.danger{background:rgba(255,64,64,.1);color:var(--red);border-color:rgba(255,64,64,.2)}
-.big-stat{font-family:var(--mono);font-size:42px;font-weight:700;text-align:center;color:var(--accent);padding:24px 0}
-.sub-stat{font-size:12px;color:var(--muted);text-align:center;padding-bottom:16px}
+.btn.primary:hover{opacity:.9}
+.btn.danger{background:rgba(255,77,106,.1);color:var(--red);border-color:rgba(255,77,106,.2)}
+.btn-row{display:grid;gap:8px;margin-bottom:8px}
+.btn-row.c2{grid-template-columns:1fr 1fr}
 
 /* TIMER BAR */
-.tbar{height:3px;background:var(--surface2);border-bottom:1px solid var(--border);overflow:hidden}
+.tbar{height:2px;background:var(--s2);overflow:hidden;border-radius:0}
 .tbar-fill{height:100%;background:var(--accent);transition:width .08s linear}
 
+/* GAME AREA */
+.game-box{background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.big-num{font-family:var(--mono);font-size:48px;font-weight:700;text-align:center;color:var(--accent);padding:20px 0 8px}
+.sub-txt{font-size:12px;color:var(--muted);text-align:center;padding-bottom:16px}
+.meta-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:10px;letter-spacing:.5px}
+.meta-row strong{color:var(--text)}
+
+/* REFLEX */
+.reflex-zone{min-height:190px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:8px;transition:background .2s}
+.rz-label{font-family:var(--mono);font-size:13px;color:var(--muted);transition:color .2s}
+.rz-wait{background:var(--s1)}
+.rz-ready{background:rgba(0,229,160,.04)}
+.rz-ready .rz-label{color:var(--green)}
+.rz-go{background:rgba(200,255,0,.06)}
+.rz-go .rz-label{color:var(--accent);font-size:22px;font-weight:700;letter-spacing:4px}
+.rz-early{background:rgba(255,77,106,.05)}
+.rz-early .rz-label{color:var(--red)}
+
 /* STROOP */
-.stroop-word{text-align:center;padding:40px 20px;font-family:var(--mono);font-size:44px;font-weight:700}
-.stroop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 0 16px}
-.stroop-opt{padding:14px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);font-family:var(--mono);font-size:14px;font-weight:700;cursor:pointer;transition:all .1s;text-align:center}
-.stroop-opt:active{transform:scale(.96)}
-.stroop-opt.ok{border-color:var(--green);background:rgba(0,230,118,.08)}
-.stroop-opt.bad{border-color:var(--red);background:rgba(255,64,64,.08)}
+.stroop-word{text-align:center;padding:32px 16px;font-family:var(--mono);font-size:40px;font-weight:700;letter-spacing:2px}
+.stroop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 0 14px}
+.stroop-opt{padding:14px;border-radius:8px;border:1px solid var(--border2);background:var(--s2);font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:.1s;text-align:center}
+.stroop-opt:active{transform:scale(.95)}
+.stroop-opt.ok{border-color:var(--green);background:rgba(0,229,160,.08)}
+.stroop-opt.bad{border-color:var(--red);background:rgba(255,77,106,.08)}
 
 /* MINE */
-.mine-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:16px}
-.mcell{aspect-ratio:1;border-radius:5px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .1s;font-family:var(--mono);font-weight:700;color:var(--muted)}
-.mcell:hover{border-color:var(--border2)}
-.mcell:active{transform:scale(.9)}
-.mcell.safe{background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.3);color:var(--green)}
-.mcell.boom{background:rgba(255,64,64,.1);border-color:rgba(255,64,64,.3);color:var(--red)}
-.mcell.revealed{cursor:default}
+.mine-stats{display:flex;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.mine-stat .val{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent)}
+.mine-stat .lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px}
+.mine-stat.right{text-align:right}
+.mine-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:12px}
+.mcell{aspect-ratio:1;border-radius:6px;border:1px solid var(--border);background:var(--s2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .12s;font-family:var(--mono);font-weight:700;color:var(--muted);position:relative;overflow:hidden}
+.mcell::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .15s}
+.mcell:hover::before{opacity:1;background:rgba(255,255,255,.04)}
+.mcell:active{transform:scale(.88)}
+.mcell.safe{background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.3);color:var(--green)}
+.mcell.boom{background:rgba(255,77,106,.1);border-color:rgba(255,77,106,.3);color:var(--red)}
+
+/* BLITZ */
+.blitz-inp{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border2);padding:20px;font-size:44px;font-family:var(--mono);font-weight:700;text-align:center;color:var(--text);outline:none;transition:border-color .15s}
+.blitz-inp:focus{border-color:var(--accent)}
+.hint-row{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)}
+.hint-lbl{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.hint-val{font-family:var(--mono);font-size:12px;font-weight:700}
+.hint-hot{color:var(--red)}
+.hint-warm{color:var(--orange)}
+.hint-cold{color:var(--blue)}
 
 /* SNAKE */
 #snakeCanvas{display:block;width:100%;image-rendering:pixelated;border-bottom:1px solid var(--border)}
-.dpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:150px;margin:16px auto}
-.dpbtn{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;touch-action:manipulation}
-.dpbtn:active{background:var(--surface);border-color:var(--border2)}
-.dpbtn svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dpad{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;max-width:144px;margin:14px auto}
+.dpbtn{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.1s;touch-action:manipulation}
+.dpbtn:active{background:var(--s3);border-color:var(--border2)}
+.dpbtn svg{width:15px;height:15px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* WAVE */
 #waveCanvas{display:block;width:100%;touch-action:none;border-bottom:1px solid var(--border)}
 
 /* WORD */
-.word-disp{font-family:var(--mono);font-size:24px;font-weight:700;text-align:center;padding:20px;letter-spacing:6px;border-bottom:1px solid var(--border)}
-.word-disp.ok{color:var(--green)}
-.word-disp.bad{color:var(--red)}
-.letter-pool{display:flex;flex-wrap:wrap;gap:6px;padding:16px;justify-content:center}
-.ltile{width:36px;height:40px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700;cursor:pointer;transition:all .1s}
-.ltile:active{transform:scale(.9)}
+.word-disp{font-family:var(--mono);font-size:22px;font-weight:700;text-align:center;padding:18px;letter-spacing:7px;border-bottom:1px solid var(--border);transition:.15s;min-height:64px;display:flex;align-items:center;justify-content:center}
+.word-disp.ok{color:var(--green);background:rgba(0,229,160,.05)}
+.word-disp.bad{color:var(--red);background:rgba(255,77,106,.05)}
+.letter-pool{display:flex;flex-wrap:wrap;gap:6px;padding:14px;justify-content:center}
+.ltile{width:37px;height:42px;background:var(--s2);border:1px solid var(--border2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:700;cursor:pointer;transition:all .1s;user-select:none}
+.ltile:active{transform:scale(.88)}
 .ltile.sel{background:var(--accent);border-color:var(--accent);color:#000}
 
-/* BLITZ */
-.blitz-inp{width:100%;background:var(--surface2);border:1px solid var(--border);border-top:none;border-left:none;border-right:none;padding:20px;font-size:36px;font-family:var(--mono);font-weight:700;text-align:center;color:var(--text);outline:none}
-.hint-box{padding:14px 16px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;border-top:1px solid var(--border)}
-.hint-hot{color:var(--red)}
-.hint-warm{color:#ffaa00}
-.hint-cold{color:var(--blue)}
-
-/* PROFILE */
-.prof-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;display:flex;align-items:center;gap:20px;margin-bottom:16px}
-.prof-av{width:64px;height:64px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:22px;font-weight:700;flex-shrink:0;overflow:hidden}
-.prof-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.prof-name{font-size:18px;font-weight:500;margin-bottom:4px}
-.prof-id{font-family:var(--mono);font-size:11px;color:var(--muted)}
-
-/* SHOP */
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px}
-.shop-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;overflow:hidden;transition:all .15s}
-.shop-item:hover{border-color:var(--border2)}
-.shop-item.owned{border-color:rgba(232,255,0,.25)}
-.shop-prev{height:70px;display:flex;align-items:center;justify-content:center;font-size:28px}
-.shop-info{padding:10px 12px}
-.shop-name{font-size:13px;font-weight:500;margin-bottom:3px}
-.shop-price{font-family:var(--mono);font-size:11px;color:var(--accent)}
-.shop-owned{font-family:var(--mono);font-size:11px;color:var(--muted)}
-
-/* STREAK */
-.streak{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
-.streak-lbl{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:10px}
-.streak-days{display:flex;gap:4px}
-.sd{flex:1;height:4px;border-radius:2px;background:var(--muted2)}
-.sd.done{background:var(--accent)}
-
-/* TOAST */
-.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:8px 16px;font-family:var(--mono);font-size:12px;z-index:999;opacity:0;transition:.2s;white-space:nowrap;pointer-events:none}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(min-width:701px){.toast{bottom:24px}}
-
-/* BOTTOM NAV MOBILE */
-.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;height:56px}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer}
-.ni svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:.15s}
-.ni span{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);transition:.15s}
-.ni.on svg{stroke:var(--accent)}
-.ni.on span{color:var(--accent)}
-body{padding-bottom:0}
-@media(max-width:700px){body{padding-bottom:56px}}
-
-/* MEMORY GAME */
-.mem-grid{display:grid;gap:6px;padding:16px}
-.mem-card{aspect-ratio:1;border-radius:5px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all .15s;user-select:none}
-.mem-card.flipped{background:var(--surface);border-color:var(--border2)}
-.mem-card.matched{background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.3)}
-
-/* TAPPING */
-.tap-area{min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;user-select:none;border-bottom:1px solid var(--border)}
-.tap-count{font-family:var(--mono);font-size:60px;font-weight:700;color:var(--text);line-height:1}
-.tap-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px}
+/* TAP */
+.tap-zone{min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);gap:6px;transition:background .1s}
+.tap-zone:active{background:rgba(200,255,0,.03)}
+.tap-count{font-family:var(--mono);font-size:64px;font-weight:700;color:var(--text);line-height:1;transition:transform .05s}
+.tap-count.bump{transform:scale(1.06)}
+.tap-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px}
 
 /* SEQUENCE */
-.seq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px}
-.seq-btn{height:80px;border-radius:6px;border:2px solid transparent;cursor:pointer;transition:all .12s;font-size:12px;font-family:var(--mono)}
-.seq-btn:active{transform:scale(.95)}
-.seq-btn.flash{opacity:1!important;transform:scale(1.04)}
+.seq-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+.seq-btn{height:88px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:all .12s;font-family:var(--mono);font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.seq-btn:active{transform:scale(.94)}
+.seq-btn.lit{transform:scale(1.04)!important}
 
+/* MEMORY */
+.mem-grid{display:grid;gap:6px;padding:14px}
+.mem-card{aspect-ratio:1;border-radius:8px;border:1px solid var(--border);background:var(--s2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all .2s;user-select:none;position:relative;overflow:hidden}
+.mem-card::before{content:'?';position:absolute;font-family:var(--mono);font-size:16px;font-weight:700;color:var(--muted);transition:opacity .15s}
+.mem-card.flipped::before,.mem-card.matched::before{opacity:0}
+.mem-card.matched{background:rgba(0,229,160,.1);border-color:rgba(0,229,160,.3)}
+.mem-card.matched .mc-inner{color:var(--green)}
+.mc-inner{position:relative;z-index:1;transition:opacity .15s}
+.mem-card:not(.flipped):not(.matched) .mc-inner{opacity:0}
+
+/* MATH */
+.math-expr{text-align:center;padding:28px 16px;font-family:var(--mono);font-size:36px;font-weight:700;border-bottom:1px solid var(--border)}
+.math-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px}
+.math-opt{padding:16px;border-radius:8px;border:1px solid var(--border2);background:var(--s2);font-family:var(--mono);font-size:18px;font-weight:700;cursor:pointer;transition:.1s;text-align:center}
+.math-opt:active{transform:scale(.95)}
+.math-opt.ok{border-color:var(--green);background:rgba(0,229,160,.08)}
+.math-opt.bad{border-color:var(--red);background:rgba(255,77,106,.08)}
+
+/* DODGE */
+#dodgeCanvas{display:block;width:100%;border-bottom:1px solid var(--border);touch-action:none}
+
+/* LB */
+.lb{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.lb-row{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);transition:background .15s}
+.lb-row:last-child{border-bottom:none}
+.lb-row.me{background:var(--adim)}
+.lb-row.top1{background:rgba(255,215,0,.04)}
+.lb-num{font-family:var(--mono);font-size:10px;color:var(--muted);width:18px;text-align:right;flex-shrink:0}
+.lb-av{width:28px;height:28px;border-radius:50%;background:var(--s2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden;color:var(--muted)}
+.lb-av img{width:100%;height:100%;object-fit:cover}
+.lb-name{flex:1;font-size:13px;color:var(--text)}
+.lb-me-tag{font-family:var(--mono);font-size:8px;color:var(--accent);margin-left:5px;vertical-align:middle}
+.lb-sc{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.lb-empty{padding:24px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* LB TABS */
+.lb-tabs{display:flex;gap:4px;padding:0;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;flex-wrap:wrap;gap:6px}
+.lb-tabs::-webkit-scrollbar{display:none}
+.lbt{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:5px 10px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--s1);color:var(--muted);transition:.15s;flex-shrink:0;font-weight:700}
+.lbt.on{background:var(--adim);border-color:rgba(200,255,0,.2);color:var(--accent)}
+
+/* PROFILE */
+.prof-hero{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:14px;position:relative;overflow:hidden}
+.prof-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(124,109,250,.12) 0%,transparent 70%);pointer-events:none}
+.prof-av-wrap{position:relative;margin-bottom:16px;display:inline-block}
+.prof-av{width:72px;height:72px;border-radius:50%;background:var(--s2);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:26px;font-weight:700;overflow:hidden;color:var(--muted)}
+.prof-av img{width:100%;height:100%;object-fit:cover}
+.prof-online{position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid var(--s1)}
+.prof-name{font-size:20px;font-weight:600;margin-bottom:3px}
+.prof-id{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:14px}
+.prof-badges{display:flex;gap:6px;flex-wrap:wrap}
+.pbadge{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:3px 8px;border-radius:4px;border:1px solid;font-weight:700}
+.pbadge-p{background:var(--pdim);color:var(--p);border-color:rgba(124,109,250,.25)}
+.pbadge-g{background:var(--adim);color:var(--accent);border-color:rgba(200,255,0,.2)}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.sc{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.sc-val{font-family:var(--mono);font-size:22px;font-weight:700;margin-bottom:3px}
+.sc-lbl{font-size:10px;color:var(--muted)}
+
+/* STREAK */
+.streak{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.streak-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.streak-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted)}
+.streak-flame{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:700}
+.streak-days{display:flex;gap:4px}
+.sd{flex:1;height:4px;border-radius:2px;background:var(--muted2);transition:background .3s}
+.sd.done{background:var(--accent)}
+
+/* HISTORY */
+.hist-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.hist-row:last-child{border-bottom:none}
+.hist-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hist-icon svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hist-game{font-size:13px;color:var(--text);flex:1}
+.hist-ts{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.hist-rew{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent)}
+
+/* SHOP */
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px}
+.shop-item{background:var(--s1);border:1px solid var(--border);border-radius:12px;cursor:pointer;overflow:hidden;transition:all .18s;position:relative}
+.shop-item:hover{border-color:var(--border2);transform:translateY(-2px)}
+.shop-item:active{transform:scale(.97)}
+.shop-item.owned{border-color:rgba(200,255,0,.2);background:var(--adim)}
+.shop-item.active-eq{border-color:var(--accent)}
+.shop-prev{height:80px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.shop-info{padding:10px 12px 13px;border-top:1px solid var(--border)}
+.shop-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.shop-desc{font-size:10px;color:var(--muted);line-height:1.35;margin-bottom:6px}
+.shop-price{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent)}
+.shop-owned{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.shop-equip{font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:700}
+.owned-check{position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.owned-check svg{width:10px;height:10px;stroke:#000;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+
+/* TOAST */
+.toast{position:fixed;bottom:68px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--s2);border:1px solid var(--border2);border-radius:8px;padding:9px 16px;font-family:var(--mono);font-size:12px;z-index:999;opacity:0;transition:.22s;white-space:nowrap;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(min-width:721px){.toast{bottom:20px}}
+
+/* MOBILE NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,16,.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);height:58px;z-index:100;display:none}
+.bnav-inner{display:flex;height:100%}
+.bni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer}
+.bni svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:.15s}
+.bni span{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--muted);transition:.15s}
+.bni.on svg{stroke:var(--accent)}
+.bni.on span{color:var(--accent)}
+
+/* ANIMATIONS */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes popIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.anim-pop{animation:popIn .2s cubic-bezier(.34,1.56,.64,1)}
+.anim-shake{animation:shake .3s ease}
 input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+input[type=number]{-moz-appearance:textfield}
 </style>
 </head>
 <body>
-
 <div class="toast" id="toast"></div>
 
 <div class="app">
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="brand">ARCADE<span>.GG</span></div>
-    <div class="nav-section">Разделы</div>
-    <nav id="sideNav">
-      <div class="nav-item on" data-p="home">
-        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 6.5L8 2l6 4.5V14a1 1 0 01-1 1H3a1 1 0 01-1-1z"/></svg>
-        Игры
-      </div>
-      <div class="nav-item" data-p="leaderboard">
-        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 14V8M8 14V3M4 14v-4"/></svg>
-        Лидерборд
-      </div>
-      <div class="nav-item" data-p="shop">
-        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 2h2l1.68 8.39a2 2 0 001.98 1.61h5.72a2 2 0 001.98-1.69l.64-4.31H4"/><circle cx="6" cy="14" r="1"/><circle cx="12" cy="14" r="1"/></svg>
-        Магазин
-      </div>
-      <div class="nav-item" data-p="profile">
-        <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.31 2.69-5 6-5s6 1.69 6 5"/></svg>
-        Профиль
-      </div>
-    </nav>
-    <div class="sidebar-bottom">
-      <div class="gear-count">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M21 12h-2M5 12H3M12 21v-2M12 5V3"/></svg>
-        <strong id="sideGears">0</strong> шестерней
-      </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="brand">
+    <div class="brand-logo">
+      <svg viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="#000"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="#000"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="#000"/><circle cx="13" cy="13" r="3" fill="#000"/></svg>
+    </div>
+    <div>
+      <div class="brand-text">ARCADE</div>
+      <div class="brand-sub">.GG</div>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Навигация</div>
+    <div class="ni on" data-p="home">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Игры</span>
+    </div>
+    <div class="ni" data-p="leaderboard">
+      <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      <span>Лидерборд</span>
+    </div>
+    <div class="ni" data-p="shop">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span>Магазин</span>
+    </div>
+    <div class="ni" data-p="profile">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Профиль</span>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="gear-pill">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M21 12h-2M5 12H3M12 21v-2M12 5V3"/></svg>
+      <div class="val" id="sideGears">0</div>
+      <div class="lbl">гир</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR mobile -->
+  <div class="topbar">
+    <div class="topbar-brand">ARCADE.GG</div>
+    <div class="topbar-gear">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M21 12h-2M5 12H3M12 21v-2M12 5V3"/></svg>
+      <span id="topGears">0</span>
     </div>
   </div>
 
-  <!-- MAIN -->
-  <div class="main">
-    <div class="content">
+  <div class="content">
 
-      <!-- HOME -->
-      <div class="page on" id="page-home">
-        <div class="page-header">
-          <div class="page-title">ARCADE.GG / GAMES</div>
-          <div class="page-h1">Выбери игру</div>
-        </div>
-        <div class="section-label">Рефлексы</div>
-        <div class="game-grid">
-          <div class="gcard" id="gc-reflex">
+    <!-- HOME -->
+    <div class="page on" id="page-home">
+      <div class="ph"><div class="ph-eyebrow">ARCADE.GG / GAMES</div><div class="ph-title">Выбери игру</div></div>
+
+      <div class="slabel">Рефлексы и скорость</div>
+      <div class="ggrid">
+
+        <div class="gcard" id="gc-reflex">
+          <div class="gcard-art art-reflex">
+            <svg viewBox="0 0 52 52" fill="none">
+              <circle cx="26" cy="26" r="20" stroke="#00e5a0" stroke-width="1.5" stroke-dasharray="4 3" opacity=".4"/>
+              <circle cx="26" cy="26" r="12" stroke="#00e5a0" stroke-width="1.5" opacity=".7"/>
+              <circle cx="26" cy="26" r="5" fill="#00e5a0"/>
+              <line x1="26" y1="6" x2="26" y2="10" stroke="#00e5a0" stroke-width="2" stroke-linecap="round"/>
+              <line x1="26" y1="42" x2="26" y2="46" stroke="#00e5a0" stroke-width="2" stroke-linecap="round"/>
+              <line x1="6" y1="26" x2="10" y2="26" stroke="#00e5a0" stroke-width="2" stroke-linecap="round"/>
+              <line x1="42" y1="26" x2="46" y2="26" stroke="#00e5a0" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gcard-body">
             <div class="gcard-tag">REACTION</div>
             <div class="gcard-name">Reflex Duel</div>
-            <div class="gcard-desc">Тапни как можно быстрее после сигнала. Измерение в мс.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+30 гир</span></div>
+            <div class="gcard-desc">Тапни в момент сигнала. Точность в миллисекундах.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+30 гир</span></div>
           </div>
-          <div class="gcard" id="gc-stroop">
-            <div class="gcard-tag">COGNITION <span class="gcard-badge badge-hot">HOT</span></div>
-            <div class="gcard-name">Color Trap</div>
-            <div class="gcard-desc">Назови цвет буквы, не слово. Струп-эффект.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+25 гир</span></div>
+        </div>
+
+        <div class="gcard" id="gc-tap">
+          <div class="gcard-art art-tap">
+            <svg viewBox="0 0 52 52" fill="none">
+              <circle cx="26" cy="26" r="18" stroke="#c8ff00" stroke-width="1.5" opacity=".3"/>
+              <circle cx="26" cy="26" r="10" stroke="#c8ff00" stroke-width="2" opacity=".6"/>
+              <path d="M26 20v12M20 26h12" stroke="#c8ff00" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="26" cy="26" r="3" fill="#c8ff00"/>
+            </svg>
           </div>
-          <div class="gcard" id="gc-tap">
+          <div class="gcard-body">
             <div class="gcard-tag">SPEED</div>
             <div class="gcard-name">Tap Blitz</div>
-            <div class="gcard-desc">Максимум тапов за 10 секунд.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+20 гир</span></div>
+            <div class="gcard-desc">Максимум тапов за 10 секунд. Чистая скорость.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+20 гир</span></div>
           </div>
         </div>
-        <div class="section-label">Логика</div>
-        <div class="game-grid">
-          <div class="gcard" id="gc-mine">
+
+        <div class="gcard" id="gc-stroop">
+          <div class="gcard-art art-stroop">
+            <svg viewBox="0 0 52 52" fill="none">
+              <rect x="6" y="16" width="18" height="12" rx="4" fill="#ff4d6a" opacity=".8"/>
+              <rect x="28" y="16" width="18" height="12" rx="4" fill="#4d9fff" opacity=".8"/>
+              <rect x="14" y="28" width="24" height="10" rx="3" fill="#7c6dfa" opacity=".7"/>
+              <circle cx="15" cy="22" r="3" fill="white" opacity=".9"/>
+              <circle cx="37" cy="22" r="3" fill="white" opacity=".9"/>
+              <circle cx="26" cy="33" r="2.5" fill="white" opacity=".9"/>
+            </svg>
+          </div>
+          <div class="gcard-body">
+            <div class="gcard-tag">COGNITION <span class="gbadge gb-hot">HOT</span></div>
+            <div class="gcard-name">Color Trap</div>
+            <div class="gcard-desc">Струп-эффект. Назови цвет, а не слово.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+25 гир</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="slabel">Логика и риск</div>
+      <div class="ggrid">
+
+        <div class="gcard" id="gc-mine">
+          <div class="gcard-art art-mine">
+            <svg viewBox="0 0 52 52" fill="none">
+              <rect x="6" y="6" width="16" height="16" rx="3" fill="#ff9500" opacity=".7"/>
+              <rect x="26" y="6" width="16" height="16" rx="3" fill="#ff9500" opacity=".4"/>
+              <rect x="6" y="26" width="16" height="16" rx="3" fill="#ff9500" opacity=".5"/>
+              <rect x="26" y="26" width="16" height="16" rx="3" stroke="#ff4d6a" stroke-width="2" fill="none"/>
+              <line x1="30" y1="30" x2="38" y2="38" stroke="#ff4d6a" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="38" y1="30" x2="30" y2="38" stroke="#ff4d6a" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gcard-body">
             <div class="gcard-tag">RISK</div>
             <div class="gcard-name">Mine Rush</div>
-            <div class="gcard-desc">Открывай клетки — копи множитель. Попадёшь на мину — теряешь всё.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+50 гир</span></div>
+            <div class="gcard-desc">Открывай клетки, копи множитель. Мина — конец.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+50 гир</span></div>
           </div>
-          <div class="gcard" id="gc-blitz">
+        </div>
+
+        <div class="gcard" id="gc-blitz">
+          <div class="gcard-art art-blitz">
+            <svg viewBox="0 0 52 52" fill="none">
+              <rect x="8" y="8" width="36" height="36" rx="8" stroke="#4d9fff" stroke-width="1.5" opacity=".5"/>
+              <text x="26" y="33" text-anchor="middle" font-size="24" font-family="Space Mono,monospace" font-weight="700" fill="#4d9fff">?</text>
+            </svg>
+          </div>
+          <div class="gcard-body">
             <div class="gcard-tag">PUZZLE</div>
             <div class="gcard-name">Number Blitz</div>
-            <div class="gcard-desc">Угадай число от 1 до 100. Меньше попыток — больше гир.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+40 гир</span></div>
+            <div class="gcard-desc">Угадай число 1–100. Меньше попыток = больше гир.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+40 гир</span></div>
           </div>
-          <div class="gcard" id="gc-seq">
-            <div class="gcard-tag">MEMORY <span class="gcard-badge badge-new">NEW</span></div>
+        </div>
+
+        <div class="gcard" id="gc-math">
+          <div class="gcard-art art-math">
+            <svg viewBox="0 0 52 52" fill="none">
+              <text x="26" y="22" text-anchor="middle" font-size="13" font-family="Space Mono,monospace" font-weight="700" fill="#00e5a0" opacity=".9">2+2=?</text>
+              <rect x="8" y="28" width="36" height="14" rx="5" stroke="#00e5a0" stroke-width="1.5" opacity=".5"/>
+              <text x="26" y="39" text-anchor="middle" font-size="11" font-family="Space Mono,monospace" fill="#00e5a0">БЫСТРО</text>
+            </svg>
+          </div>
+          <div class="gcard-body">
+            <div class="gcard-tag">MATH <span class="gbadge gb-new">NEW</span></div>
+            <div class="gcard-name">Math Sprint</div>
+            <div class="gcard-desc">10 примеров на время. Арифметика в голове.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+35 гир</span></div>
+          </div>
+        </div>
+
+        <div class="gcard" id="gc-seq">
+          <div class="gcard-art art-seq">
+            <svg viewBox="0 0 52 52" fill="none">
+              <rect x="6" y="6" width="18" height="18" rx="5" fill="#ff4d6a" opacity=".6"/>
+              <rect x="28" y="6" width="18" height="18" rx="5" fill="#4d9fff" opacity=".6"/>
+              <rect x="6" y="28" width="18" height="18" rx="5" fill="#00e5a0" opacity=".6"/>
+              <rect x="28" y="28" width="18" height="18" rx="5" fill="#c8ff00" opacity=".6"/>
+              <circle cx="15" cy="15" r="5" fill="white" opacity=".6"/>
+            </svg>
+          </div>
+          <div class="gcard-body">
+            <div class="gcard-tag">MEMORY</div>
             <div class="gcard-name">Sequence</div>
-            <div class="gcard-desc">Запомни и повтори последовательность. Как Simon Says.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+35 гир</span></div>
+            <div class="gcard-desc">Simon Says. Запомни и повтори — длиннее с каждым раундом.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+35 гир</span></div>
           </div>
-          <div class="gcard" id="gc-mem">
+        </div>
+
+        <div class="gcard" id="gc-mem">
+          <div class="gcard-art art-mem">
+            <svg viewBox="0 0 52 52" fill="none">
+              <rect x="6" y="6" width="18" height="18" rx="4" stroke="#7c6dfa" stroke-width="1.5" opacity=".7"/>
+              <rect x="28" y="6" width="18" height="18" rx="4" fill="#7c6dfa" opacity=".5"/>
+              <rect x="6" y="28" width="18" height="18" rx="4" fill="#7c6dfa" opacity=".5"/>
+              <rect x="28" y="28" width="18" height="18" rx="4" stroke="#7c6dfa" stroke-width="1.5" opacity=".7"/>
+              <path d="M31 15l4 4 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+              <path d="M9 37l4 4 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+            </svg>
+          </div>
+          <div class="gcard-body">
             <div class="gcard-tag">MEMORY</div>
             <div class="gcard-name">Flip Match</div>
-            <div class="gcard-desc">Найди все пары карточек. Меньше ходов — лучше результат.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+30 гир</span></div>
+            <div class="gcard-desc">Найди все пары. Меньше ходов — выше счёт.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+30 гир</span></div>
           </div>
         </div>
-        <div class="section-label">Аркады</div>
-        <div class="game-grid">
-          <div class="gcard" id="gc-snake">
+
+      </div>
+
+      <div class="slabel">Аркады</div>
+      <div class="ggrid">
+
+        <div class="gcard" id="gc-snake">
+          <div class="gcard-art art-snake">
+            <svg viewBox="0 0 52 52" fill="none">
+              <polyline points="8,36 16,36 16,20 28,20 28,38 44,38" fill="none" stroke="#00e5a0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="44" cy="38" r="5" fill="#00e5a0"/>
+              <rect x="5" y="10" width="7" height="7" rx="2" fill="#c8ff00" opacity=".8"/>
+            </svg>
+          </div>
+          <div class="gcard-body">
             <div class="gcard-tag">ARCADE</div>
             <div class="gcard-name">Neon Snake</div>
-            <div class="gcard-desc">Классическая змейка. Каждое яблоко = +2 гир.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+35 гир</span></div>
+            <div class="gcard-desc">Классика. Каждое яблоко +2 гир.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+35 гир</span></div>
           </div>
-          <div class="gcard" id="gc-wave">
-            <div class="gcard-tag">ARCADE <span class="gcard-badge badge-new">NEW</span></div>
+        </div>
+
+        <div class="gcard" id="gc-wave">
+          <div class="gcard-art art-wave">
+            <svg viewBox="0 0 52 52" fill="none">
+              <path d="M4 32 Q13 16 22 32 Q31 48 40 32 Q49 16 56 32" fill="none" stroke="#4d9fff" stroke-width="2.5" stroke-linecap="round" opacity=".7"/>
+              <circle cx="22" cy="20" r="6" fill="#4d9fff" opacity=".9"/>
+              <line x1="22" y1="26" x2="22" y2="30" stroke="#4d9fff" stroke-width="1.5" opacity=".5"/>
+            </svg>
+          </div>
+          <div class="gcard-body">
+            <div class="gcard-tag">ARCADE <span class="gbadge gb-new">NEW</span></div>
             <div class="gcard-name">Wave Surf</div>
             <div class="gcard-desc">Держи сёрфера на волне как можно дольше.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+30 гир</span></div>
+            <div class="gcard-foot"><span class="gcard-rew">+30 гир</span></div>
           </div>
         </div>
-        <div class="section-label">Слова</div>
-        <div class="game-grid">
-          <div class="gcard" id="gc-word">
+
+        <div class="gcard" id="gc-dodge">
+          <div class="gcard-art art-dodge">
+            <svg viewBox="0 0 52 52" fill="none">
+              <circle cx="26" cy="38" r="6" fill="#ff9500" opacity=".9"/>
+              <rect x="8" y="10" width="10" height="10" rx="3" fill="#ff4d6a" opacity=".7"/>
+              <rect x="26" y="18" width="10" height="10" rx="3" fill="#ff4d6a" opacity=".7"/>
+              <rect x="14" y="24" width="10" height="10" rx="3" fill="#ff4d6a" opacity=".5"/>
+              <path d="M8 8l36 36" stroke="#ff9500" stroke-width="1" stroke-dasharray="3 3" opacity=".3"/>
+            </svg>
+          </div>
+          <div class="gcard-body">
+            <div class="gcard-tag">ARCADE <span class="gbadge gb-new">NEW</span></div>
+            <div class="gcard-name">Dodge Rush</div>
+            <div class="gcard-desc">Уклоняйся от блоков. Выживи как можно дольше.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+40 гир</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="slabel">Слова</div>
+      <div class="ggrid">
+        <div class="gcard" id="gc-word">
+          <div class="gcard-art art-word">
+            <svg viewBox="0 0 52 52" fill="none">
+              <rect x="6" y="14" width="16" height="16" rx="5" fill="#ff4d6a" opacity=".7"/>
+              <rect x="26" y="18" width="20" height="16" rx="5" fill="#7c6dfa" opacity=".7"/>
+              <text x="14" y="26" text-anchor="middle" font-size="9" font-family="Space Mono,monospace" font-weight="700" fill="white">W</text>
+              <text x="36" y="30" text-anchor="middle" font-size="9" font-family="Space Mono,monospace" font-weight="700" fill="white">RD</text>
+            </svg>
+          </div>
+          <div class="gcard-body">
             <div class="gcard-tag">VOCABULARY</div>
             <div class="gcard-name">Word Rush</div>
-            <div class="gcard-desc">Собирай слова из случайных букв. 60 секунд.</div>
-            <div class="gcard-bottom"><span class="gcard-rew">+45 гир</span></div>
+            <div class="gcard-desc">Собирай слова из букв. 60 секунд.</div>
+            <div class="gcard-foot"><span class="gcard-rew">+45 гир</span></div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- LEADERBOARD -->
-      <div class="page" id="page-leaderboard">
-        <div class="page-header">
-          <div class="page-title">ARCADE.GG / LEADERBOARD</div>
-          <div class="page-h1">Рейтинг</div>
-        </div>
-        <div class="section-label">Твоя позиция</div>
-        <div id="myRankRow" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px">
-          <div class="lb-num" id="myRankNum">—</div>
-          <div class="lb-av" id="myRankAv"></div>
-          <div class="lb-name" id="myRankName">—</div>
-          <div class="lb-sc" id="myRankSc">0 гир</div>
-        </div>
-        <div class="section-label">Топ игроков</div>
-        <div class="lb" id="globalLb"></div>
-        <div style="margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center">
-          Лидерборд обновляется в реальном времени
-        </div>
+    <!-- LEADERBOARD -->
+    <div class="page" id="page-leaderboard">
+      <div class="ph"><div class="ph-eyebrow">ARCADE.GG / LEADERBOARD</div><div class="ph-title">Рейтинг</div></div>
+
+      <div class="slabel">По шестерням</div>
+      <div id="myRankCard" style="background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="lb-num" id="myRankNum">#1</div>
+        <div class="lb-av" id="myRankAv"></div>
+        <div class="lb-name" id="myRankName">—<span class="lb-me-tag">ты</span></div>
+        <div class="lb-sc" id="myRankSc">0 гир</div>
       </div>
+      <div class="lb" id="globalLb"></div>
 
-      <!-- SHOP -->
-      <div class="page" id="page-shop">
-        <div class="page-header">
-          <div class="page-title">ARCADE.GG / SHOP</div>
-          <div class="page-h1">Магазин</div>
-        </div>
-        <div class="section-label">Аватары</div>
-        <div class="shop-grid" id="shopGrid"></div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Баланс: <span id="shopBal" style="color:var(--accent)">0</span> гир</div>
+      <div class="slabel" style="margin-top:24px">По играм</div>
+      <div class="lb-tabs" id="lbTabs">
+        <div class="lbt on" data-g="reflex">Reflex</div>
+        <div class="lbt" data-g="tap">Tap</div>
+        <div class="lbt" data-g="stroop">Color Trap</div>
+        <div class="lbt" data-g="mine">Mine Rush</div>
+        <div class="lbt" data-g="blitz">Blitz</div>
+        <div class="lbt" data-g="math">Math</div>
+        <div class="lbt" data-g="seq">Sequence</div>
+        <div class="lbt" data-g="mem">Flip</div>
+        <div class="lbt" data-g="snake">Snake</div>
+        <div class="lbt" data-g="wave">Wave</div>
+        <div class="lbt" data-g="dodge">Dodge</div>
+        <div class="lbt" data-g="word">Words</div>
       </div>
+      <div class="lb" id="gameLb"></div>
+    </div>
 
-      <!-- PROFILE -->
-      <div class="page" id="page-profile">
-        <div class="page-header">
-          <div class="page-title">ARCADE.GG / PROFILE</div>
-          <div class="page-h1">Профиль</div>
-        </div>
-        <div class="prof-card">
+    <!-- SHOP -->
+    <div class="page" id="page-shop">
+      <div class="ph"><div class="ph-eyebrow">ARCADE.GG / SHOP</div><div class="ph-title">Магазин</div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div class="slabel" style="margin:0">Темы аватара</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">Баланс: <span id="shopBal" style="color:var(--accent)">0</span></div>
+      </div>
+      <div class="shop-grid" id="shopGrid"></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="page-profile">
+      <div class="ph"><div class="ph-eyebrow">ARCADE.GG / PROFILE</div><div class="ph-title">Профиль</div></div>
+
+      <div class="prof-hero">
+        <div class="prof-av-wrap">
           <div class="prof-av" id="profAv"></div>
-          <div>
-            <div class="prof-name" id="profName">—</div>
-            <div class="prof-id" id="profId">—</div>
-          </div>
+          <div class="prof-online"></div>
         </div>
-        <div class="stat-row">
-          <div class="stat-cell"><div class="stat-val" id="stGears">0</div><div class="stat-lbl">Шестерни</div></div>
-          <div class="stat-cell"><div class="stat-val" id="stGames">0</div><div class="stat-lbl">Сыграно</div></div>
-          <div class="stat-cell"><div class="stat-val" id="stStreak">0</div><div class="stat-lbl">Стрик</div></div>
+        <div class="prof-name" id="profName">—</div>
+        <div class="prof-id" id="profId">ID: —</div>
+        <div class="prof-badges">
+          <div class="pbadge pbadge-p">PLAYER</div>
+          <div class="pbadge pbadge-g" id="profBestGame" style="display:none">TOP GAME: —</div>
         </div>
-        <div class="streak">
-          <div class="streak-lbl">СТРИК ЭТОЙ НЕДЕЛИ</div>
-          <div class="streak-days" id="streakDays"></div>
-        </div>
-        <div class="section-label" style="margin-top:16px">История игр</div>
-        <div id="histList" style="border:1px solid var(--border);border-radius:8px;overflow:hidden"></div>
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /app -->
+      <div class="stat-grid">
+        <div class="sc"><div class="sc-val" id="stGears" style="color:var(--accent)">0</div><div class="sc-lbl">Шестерни</div></div>
+        <div class="sc"><div class="sc-val" id="stGames" style="color:var(--p)">0</div><div class="sc-lbl">Игр сыграно</div></div>
+        <div class="sc"><div class="sc-val" id="stStreak" style="color:var(--orange)">0</div><div class="sc-lbl">Стрик дней</div></div>
+      </div>
+
+      <div class="streak">
+        <div class="streak-top">
+          <div class="streak-lbl">СТРИК ЭТОЙ НЕДЕЛИ</div>
+          <div class="streak-flame" id="streakFlame">0 дней</div>
+        </div>
+        <div class="streak-days" id="streakDays"></div>
+      </div>
+
+      <div class="slabel">Рекорды</div>
+      <div class="lb" id="profScores"></div>
+
+      <div class="slabel" style="margin-top:16px">История</div>
+      <div class="lb" id="histList"></div>
+    </div>
+
+  </div><!-- content -->
+</div><!-- main -->
+</div><!-- app -->
 
 <!-- BOTTOM NAV -->
 <div class="bnav">
-  <div class="ni on" data-p="home">
-    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-    <span>ИГРЫ</span>
-  </div>
-  <div class="ni" data-p="leaderboard">
-    <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-    <span>ТОП</span>
-  </div>
-  <div class="ni" data-p="shop">
-    <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-    <span>ШОП</span>
-  </div>
-  <div class="ni" data-p="profile">
-    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    <span>ПРОФИЛЬ</span>
+  <div class="bnav-inner">
+    <div class="bni on" data-p="home">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>ИГРЫ</span>
+    </div>
+    <div class="bni" data-p="leaderboard">
+      <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      <span>ТОП</span>
+    </div>
+    <div class="bni" data-p="shop">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span>ШОП</span>
+    </div>
+    <div class="bni" data-p="profile">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>ПРОФИЛЬ</span>
+    </div>
   </div>
 </div>
 
 <!-- OVERLAYS -->
-
 <!-- REFLEX -->
 <div class="ov" id="ov-reflex">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-reflex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">REFLEX DUEL</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-reflex"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">REFLEX DUEL</div></div>
   <div class="ov-body">
-    <div class="game-area" id="reflexArea" style="display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:180px;cursor:pointer;gap:8px">
-      <div style="font-family:var(--mono);font-size:13px;color:var(--muted)" id="reflexTxt">Нажми чтобы начать</div>
-    </div>
-    <div id="reflexRes" style="display:none;margin-bottom:14px">
-      <div class="big-stat" id="reflexMs">— мс</div>
-      <div class="sub-stat" id="reflexRating">—</div>
-    </div>
+    <div class="game-box"><div class="reflex-zone rz-wait" id="reflexArea"><div class="rz-label" id="reflexTxt">Нажми чтобы начать</div></div></div>
+    <div id="reflexRes" style="display:none;margin-bottom:14px"><div class="big-num" id="reflexMs">— мс</div><div class="sub-txt" id="reflexRating">—</div></div>
     <div class="btn-row"><button class="btn primary" onclick="startReflex()">Новый раунд</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="slabel" style="margin-top:20px">Твой рекорд</div>
     <div class="lb" id="reflexLb"></div>
   </div>
 </div>
 
 <!-- STROOP -->
 <div class="ov" id="ov-stroop">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-stroop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">COLOR TRAP</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-stroop"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">COLOR TRAP</div></div>
   <div class="ov-body">
-    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px">
-      <span>РАУНД <span id="sRound" style="color:var(--text)">0</span>/10</span>
-      <span>СЧЁТ <span id="sScore" style="color:var(--accent)">0</span></span>
-    </div>
-    <div class="game-area">
+    <div class="meta-row"><span>РАУНД <strong id="sRound">0</strong>/10</span><span>СЧЁТ <strong id="sScore" style="color:var(--accent)">0</strong></span></div>
+    <div class="game-box">
       <div class="tbar"><div class="tbar-fill" id="sTimer" style="width:100%"></div></div>
       <div class="stroop-word" id="sWord">—</div>
       <div class="stroop-grid" id="sOpts"></div>
     </div>
-    <div id="sEnd" style="display:none;text-align:center;padding:24px 0">
-      <div class="big-stat" id="sFinalScore">0</div>
-      <div class="sub-stat">очков за 10 раундов</div>
-    </div>
+    <div id="sEnd" style="display:none"><div class="big-num" id="sFinalScore">0</div><div class="sub-txt">очков за 10 раундов</div></div>
     <div class="btn-row"><button class="btn primary" id="sStartBtn" onclick="startStroop()">Начать</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="stroopLb"></div>
   </div>
 </div>
 
 <!-- MINE -->
 <div class="ov" id="ov-mine">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">MINE RUSH</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-mine"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">MINE RUSH</div></div>
   <div class="ov-body">
-    <div class="game-area">
-      <div style="padding:16px;display:flex;justify-content:space-between;border-bottom:1px solid var(--border)">
-        <div><div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--accent)" id="mMulti">1.00x</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted)">МНОЖИТЕЛЬ</div></div>
-        <div style="text-align:right"><div style="font-family:var(--mono);font-size:24px;font-weight:700" id="mPot">10</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted)">ГИР (ЕСЛИ ЗАБРАТЬ)</div></div>
+    <div class="game-box">
+      <div class="mine-stats">
+        <div class="mine-stat"><div class="val" id="mMulti">1.00x</div><div class="lbl">МНОЖИТЕЛЬ</div></div>
+        <div class="mine-stat right"><div class="val" id="mPot">10</div><div class="lbl">ГИР (ЕСЛИ ЗАБРАТЬ)</div></div>
       </div>
       <div class="mine-grid" id="mGrid"></div>
     </div>
-    <div class="btn-row cols2">
-      <button class="btn" onclick="startMine()">Новая игра</button>
-      <button class="btn primary" id="mCash" disabled onclick="cashMine()">Забрать</button>
-    </div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="btn-row c2"><button class="btn" onclick="startMine()">Новая игра</button><button class="btn primary" id="mCash" disabled onclick="cashMine()">Забрать</button></div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="mineLb"></div>
   </div>
 </div>
 
 <!-- BLITZ -->
 <div class="ov" id="ov-blitz">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-blitz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">NUMBER BLITZ</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-blitz"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">NUMBER BLITZ</div></div>
   <div class="ov-body">
-    <div class="game-area">
-      <input class="blitz-inp" type="number" id="bInp" placeholder="1–100" min="1" max="100">
-      <div class="hint-box">
-        <span style="color:var(--muted)">Попыток: <span id="bAtt" style="color:var(--text)">0</span></span>
-        <span id="bHint" style="color:var(--muted)">Начинай</span>
-      </div>
+    <div class="meta-row"><span>УГАДАЙ ЧИСЛО</span><span>1 — 100</span></div>
+    <div class="game-box">
+      <input class="blitz-inp" type="number" id="bInp" placeholder="?" min="1" max="100">
+      <div class="hint-row"><span class="hint-lbl">Попыток: <strong id="bAtt" style="color:var(--text)">0</strong></span><span class="hint-val" id="bHint">Начинай</span></div>
     </div>
-    <div class="btn-row" style="margin-top:10px"><button class="btn primary" onclick="guessBlitz()">Угадать</button></div>
+    <div class="btn-row"><button class="btn primary" onclick="guessBlitz()">Угадать</button></div>
     <div class="btn-row"><button class="btn" onclick="startBlitz()">Новая игра</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="blitzLb"></div>
   </div>
 </div>
 
 <!-- SNAKE -->
 <div class="ov" id="ov-snake">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-snake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">NEON SNAKE</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-snake"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">NEON SNAKE</div></div>
   <div class="ov-body">
-    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px">
-      <span>СЧЁТ <span id="snScore" style="color:var(--accent)">0</span></span>
-      <span>РЕКОРД <span id="snBest" style="color:var(--text)">0</span></span>
-    </div>
-    <div class="game-area">
-      <canvas id="snakeCanvas" width="300" height="300"></canvas>
+    <div class="meta-row"><span>СЧЁТ <strong id="snScore" style="color:var(--accent)">0</strong></span><span>РЕКОРД <strong id="snBest" style="color:var(--text)">0</strong></span></div>
+    <div class="game-box"><canvas id="snakeCanvas" width="300" height="300"></canvas>
       <div class="dpad">
         <div></div><div class="dpbtn" id="dUp"><svg viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg></div><div></div>
         <div class="dpbtn" id="dLeft"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
@@ -540,190 +816,180 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
       </div>
     </div>
     <div class="btn-row" style="margin-top:10px"><button class="btn primary" onclick="startSnake()">Новая игра</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="snakeLb"></div>
   </div>
 </div>
 
 <!-- WAVE -->
 <div class="ov" id="ov-wave">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-wave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">WAVE SURF</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-wave"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">WAVE SURF</div></div>
   <div class="ov-body">
-    <div style="font-family:var(--mono);font-size:36px;font-weight:700;text-align:center;color:var(--accent);margin-bottom:8px" id="wScore">0.0s</div>
-    <div class="game-area">
-      <canvas id="waveCanvas" width="320" height="190"></canvas>
-    </div>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;margin:10px 0">Держи палец — сёрфер держится на волне</div>
+    <div class="big-num" id="wScore">0.0s</div>
+    <div class="game-box"><canvas id="waveCanvas" width="320" height="190"></canvas></div>
+    <div style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted);margin:10px 0">Держи палец — сёрфер держится на волне</div>
     <div class="btn-row"><button class="btn primary" id="wStartBtn" onclick="startWave()">Начать</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="waveLb"></div>
   </div>
 </div>
 
 <!-- WORD -->
 <div class="ov" id="ov-word">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-word"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">WORD RUSH</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-word"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">WORD RUSH</div></div>
   <div class="ov-body">
-    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px">
-      <span>ОЧКИ <span id="wdScore" style="color:var(--accent)">0</span></span>
-      <span>ВРЕМЯ <span id="wdTimer" style="color:var(--text)">60s</span></span>
-    </div>
-    <div class="game-area">
+    <div class="meta-row"><span>ОЧКИ <strong id="wdScore" style="color:var(--accent)">0</strong></span><span>ВРЕМЯ <strong id="wdTimer" style="color:var(--text)">60s</strong></span></div>
+    <div class="game-box">
       <div class="word-disp" id="wdDisp">_ _ _ _</div>
       <div class="letter-pool" id="wdLetters"></div>
     </div>
-    <div class="btn-row cols2" style="margin-top:10px">
-      <button class="btn danger" onclick="clearWord()">Очистить</button>
-      <button class="btn primary" onclick="submitWord()">Слово</button>
-    </div>
+    <div class="btn-row c2" style="margin-top:10px"><button class="btn danger" onclick="clearWord()">Очистить</button><button class="btn primary" onclick="submitWord()">Слово</button></div>
     <div class="btn-row"><button class="btn" onclick="startWord()">Новая игра</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="wordLb"></div>
   </div>
 </div>
 
 <!-- TAP -->
 <div class="ov" id="ov-tap">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-tap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">TAP BLITZ</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-tap"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">TAP BLITZ</div></div>
   <div class="ov-body">
-    <div class="game-area">
-      <div class="tap-area" id="tapArea" onclick="doTap()">
+    <div class="game-box">
+      <div class="tap-zone" id="tapZone" onclick="doTap()">
         <div class="tap-count" id="tapCount">0</div>
         <div class="tap-sub" id="tapSub">НАЖМИ ЧТОБЫ НАЧАТЬ</div>
       </div>
-      <div style="padding:12px 16px;border-top:1px solid var(--border)">
-        <div class="tbar" style="border:none;margin:0"><div class="tbar-fill" id="tapBar" style="width:100%"></div></div>
-      </div>
+      <div style="padding:10px 14px"><div class="tbar" style="height:3px"><div class="tbar-fill" id="tapBar" style="width:100%"></div></div></div>
     </div>
-    <div class="btn-row" style="margin-top:10px"><button class="btn primary" onclick="startTap()">Новая игра</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="btn-row" style="margin-top:10px"><button class="btn primary" onclick="resetTap()">Новая игра</button></div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="tapLb"></div>
   </div>
 </div>
 
 <!-- SEQUENCE -->
 <div class="ov" id="ov-seq">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-seq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">SEQUENCE</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-seq"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">SEQUENCE</div></div>
   <div class="ov-body">
-    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px">
-      <span>УРОВЕНЬ <span id="seqLevel" style="color:var(--accent)">0</span></span>
-      <span id="seqStatus" style="color:var(--muted)">Нажми старт</span>
-    </div>
-    <div class="game-area">
-      <div class="seq-grid" id="seqGrid"></div>
-    </div>
+    <div class="meta-row"><span>УРОВЕНЬ <strong id="seqLevel" style="color:var(--accent)">0</strong></span><span id="seqStatus" style="color:var(--muted)">Нажми старт</span></div>
+    <div class="game-box"><div class="seq-grid" id="seqGrid"></div></div>
     <div class="btn-row" style="margin-top:10px"><button class="btn primary" onclick="startSeq()">Начать</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="seqLb"></div>
   </div>
 </div>
 
 <!-- FLIP MATCH -->
 <div class="ov" id="ov-mem">
-  <div class="ov-bar">
-    <div class="ov-back" id="back-mem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Назад</div>
-    <div class="ov-title">FLIP MATCH</div>
-  </div>
+  <div class="ov-bar"><div class="ov-back" id="back-mem"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">FLIP MATCH</div></div>
   <div class="ov-body">
-    <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px">
-      <span>ХОДОВ <span id="memMoves" style="color:var(--accent)">0</span></span>
-      <span>ПАР <span id="memPairs" style="color:var(--text)">0</span>/8</span>
-    </div>
-    <div class="game-area">
-      <div class="mem-grid" id="memGrid" style="grid-template-columns:repeat(4,1fr)"></div>
-    </div>
+    <div class="meta-row"><span>ХОДОВ <strong id="memMoves" style="color:var(--accent)">0</strong></span><span>ПАР <strong id="memPairs" style="color:var(--text)">0</strong>/8</span></div>
+    <div class="game-box"><div class="mem-grid" id="memGrid" style="grid-template-columns:repeat(4,1fr)"></div></div>
     <div class="btn-row" style="margin-top:10px"><button class="btn primary" onclick="startMem()">Новая игра</button></div>
-    <div class="section-label" style="margin-top:20px">Топ</div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
     <div class="lb" id="memLb"></div>
   </div>
 </div>
 
+<!-- MATH SPRINT -->
+<div class="ov" id="ov-math">
+  <div class="ov-bar"><div class="ov-back" id="back-math"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">MATH SPRINT</div></div>
+  <div class="ov-body">
+    <div class="meta-row"><span>ВОПРОС <strong id="mathQ" style="color:var(--accent)">0</strong>/10</span><span>СЧЁТ <strong id="mathSc" style="color:var(--text)">0</strong></span></div>
+    <div class="game-box">
+      <div class="tbar"><div class="tbar-fill" id="mathTimer" style="width:100%"></div></div>
+      <div class="math-expr" id="mathExpr">—</div>
+      <div class="math-opts" id="mathOpts"></div>
+    </div>
+    <div id="mathEnd" style="display:none"><div class="big-num" id="mathFinal">0</div><div class="sub-txt">очков за 10 вопросов</div></div>
+    <div class="btn-row"><button class="btn primary" id="mathStartBtn" onclick="startMath()">Начать</button></div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
+    <div class="lb" id="mathLb"></div>
+  </div>
+</div>
+
+<!-- DODGE -->
+<div class="ov" id="ov-dodge">
+  <div class="ov-bar"><div class="ov-back" id="back-dodge"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Назад</div><div class="ov-htitle">DODGE RUSH</div></div>
+  <div class="ov-body">
+    <div class="meta-row"><span>ВРЕМЯ <strong id="dodgeTime" style="color:var(--accent)">0.0s</strong></span><span>РЕКОРД <strong id="dodgeBest" style="color:var(--text)">0.0s</strong></span></div>
+    <div class="game-box"><canvas id="dodgeCanvas" width="320" height="240" style="cursor:none"></canvas></div>
+    <div style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted);margin:10px 0">Двигай мышью / пальцем — уклоняйся от блоков</div>
+    <div class="btn-row"><button class="btn primary" id="dodgeStartBtn" onclick="startDodge()">Начать</button></div>
+    <div class="slabel" style="margin-top:20px">Рекорд</div>
+    <div class="lb" id="dodgeLb"></div>
+  </div>
+</div>
+
 <script>
-// ─── STATE ───────────────────────────────────────────────────────────────────
-var S = JSON.parse(localStorage.getItem('arcS') || 'null') || {
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+var S = JSON.parse(localStorage.getItem('arc2') || 'null') || {
   uid: Math.floor(Math.random()*9e6)+1e6,
   name: 'Игрок',
   gears: 100,
   played: 0,
   streak: 0,
   streakDays: [false,false,false,false,false,false,false],
-  owned: ['mono'],
-  equip: 'mono',
+  owned: ['default'],
+  equip: 'default',
   scores: {},
   history: [],
   photoUrl: null
 };
-
-// TG
-var tgUser = null;
 if(window.Telegram&&Telegram.WebApp){
-  Telegram.WebApp.ready();
-  Telegram.WebApp.expand();
-  try{Telegram.WebApp.setHeaderColor('#0a0a0a')}catch(e){}
-  try{Telegram.WebApp.setBackgroundColor('#0a0a0a')}catch(e){}
-  var u = Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.user;
+  Telegram.WebApp.ready(); Telegram.WebApp.expand();
+  try{Telegram.WebApp.setHeaderColor('#080810')}catch(e){}
+  try{Telegram.WebApp.setBackgroundColor('#080810')}catch(e){}
+  var u=Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.user;
   if(u){
-    tgUser = u;
-    S.uid = u.id;
-    S.name = u.first_name+(u.last_name?' '+u.last_name:'');
-    if(u.photo_url) S.photoUrl = u.photo_url;
+    S.uid=u.id; S.name=u.first_name+(u.last_name?' '+u.last_name:'');
+    if(u.photo_url) S.photoUrl=u.photo_url;
   }
 }
-
-function save(){ localStorage.setItem('arcS',JSON.stringify(S)); }
-
-function addGears(n, game){
-  S.gears += n;
-  S.played++;
+function save(){localStorage.setItem('arc2',JSON.stringify(S));}
+function addGears(n,game){
+  S.gears+=n; S.played++;
   if(game){
-    var best = S.scores[game]||0;
-    if(n > best) S.scores[game] = n;
-    S.history.unshift({game:game, gears:n, ts: Date.now()});
-    if(S.history.length > 20) S.history = S.history.slice(0,20);
+    var best=S.scores[game]||0;
+    if(n>best) S.scores[game]=n;
+    S.history.unshift({game:game,gears:n,ts:Date.now()});
+    if(S.history.length>30) S.history=S.history.slice(0,30);
   }
   save(); refreshUI();
   showToast('+'+n+' гир');
 }
 
-// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════════════════
 function goPage(p){
   document.querySelectorAll('.page').forEach(function(x){x.classList.remove('on')});
-  document.querySelectorAll('.nav-item, .ni').forEach(function(x){x.classList.remove('on')});
-  var pg = document.getElementById('page-'+p);
-  if(pg) pg.classList.add('on');
+  document.querySelectorAll('.ni,.bni').forEach(function(x){x.classList.remove('on')});
+  var pg=document.getElementById('page-'+p); if(pg) pg.classList.add('on');
   document.querySelectorAll('[data-p="'+p+'"]').forEach(function(x){x.classList.add('on')});
-  if(p==='leaderboard') renderGlobalLb();
+  if(p==='leaderboard'){renderGlobalLb();renderGameLb('reflex',document.getElementById('gameLb'));}
   if(p==='profile') renderProfile();
   if(p==='shop') renderShop();
 }
-document.getElementById('sideNav').addEventListener('click',function(e){
-  var t=e.target.closest('.nav-item'); if(!t) return; goPage(t.dataset.p);
-});
-document.querySelector('.bnav').addEventListener('click',function(e){
-  var t=e.target.closest('.ni'); if(!t) return; goPage(t.dataset.p);
+document.querySelector('.sidebar').addEventListener('click',function(e){var t=e.target.closest('.ni');if(!t||!t.dataset.p)return;goPage(t.dataset.p);});
+document.querySelector('.bnav').addEventListener('click',function(e){var t=e.target.closest('.bni');if(!t||!t.dataset.p)return;goPage(t.dataset.p);});
+document.getElementById('lbTabs').addEventListener('click',function(e){
+  var t=e.target.closest('.lbt'); if(!t) return;
+  document.querySelectorAll('.lbt').forEach(function(x){x.classList.remove('on')});
+  t.classList.add('on');
+  renderGameLb(t.dataset.g, document.getElementById('gameLb'));
 });
 
-// Games
-var allGames=['reflex','stroop','mine','blitz','snake','wave','word','tap','seq','mem'];
+// GAMES OPEN/CLOSE
+var allGames=['reflex','stroop','mine','blitz','snake','wave','word','tap','seq','mem','math','dodge'];
 allGames.forEach(function(g){
   var gc=document.getElementById('gc-'+g);
   if(gc) gc.addEventListener('click',function(){openGame(g)});
   var bk=document.getElementById('back-'+g);
   if(bk) bk.addEventListener('click',function(){closeGame(g)});
 });
-
 function openGame(id){
   var ov=document.getElementById('ov-'+id); if(!ov) return;
   ov.classList.add('on');
@@ -735,6 +1001,8 @@ function openGame(id){
   if(id==='wave') resizeWave();
   if(id==='seq') buildSeqGrid();
   if(id==='mem') startMem();
+  if(id==='math') resetMath();
+  if(id==='dodge') resizeDodge();
   if(id==='tap') resetTap();
 }
 function closeGame(id){
@@ -743,189 +1011,240 @@ function closeGame(id){
   if(id==='wave') stopWave();
   if(id==='word') stopWord();
   if(id==='tap') stopTap();
+  if(id==='dodge') stopDodge();
 }
 
-// ─── TOAST ────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════
 var _tt;
 function showToast(m){
-  var el=document.getElementById('toast');
-  el.textContent=m; el.classList.add('on');
+  var el=document.getElementById('toast'); el.textContent=m; el.classList.add('on');
   clearTimeout(_tt); _tt=setTimeout(function(){el.classList.remove('on')},2000);
 }
 
-// ─── AVATAR ───────────────────────────────────────────────────────────────────
-function makeAvEl(el, name, url){
-  if(url){
+// ═══════════════════════════════════════════════════════════
+// AVATAR
+// ═══════════════════════════════════════════════════════════
+var shopItems=[
+  {id:'default',name:'Default',desc:'Стандартный монохромный стиль.',price:0,bg:'#0f0f1a',fg:'#5a5a80'},
+  {id:'neon',   name:'Neon',   desc:'Кислотно-зелёный. Только для победителей.',price:200,bg:'#0a1f14',fg:'#00e5a0'},
+  {id:'plasma', name:'Plasma', desc:'Фиолетовая плазма. Выглядит как магия.',price:350,bg:'#120a1f',fg:'#7c6dfa'},
+  {id:'fire',   name:'Fire',   desc:'Огненная тема. Горячий топ.',price:350,bg:'#1f0a08',fg:'#ff4d6a'},
+  {id:'solar',  name:'Solar',  desc:'Солнечный жёлтый. Максимум энергии.',price:500,bg:'#1a1600',fg:'#c8ff00'},
+  {id:'ocean',  name:'Ocean',  desc:'Синие глубины. Спокойный уверенный стиль.',price:500,bg:'#081020',fg:'#4d9fff'},
+  {id:'hacker', name:'Hacker', desc:'Матрица. Зелёные коды в ночи.',price:600,bg:'#06120a',fg:'#39ff14'},
+  {id:'gold',   name:'Gold',   desc:'Золото для топ игроков. Редкий.',price:1000,bg:'#1a1400',fg:'#ffd700'},
+];
+function getShopItem(id){return shopItems.find(function(x){return x.id===id})||shopItems[0];}
+function getAvatarStyle(id){var it=getShopItem(id);return{bg:it.bg,fg:it.fg};}
+
+function setAvEl(el,name,photoUrl,themeId){
+  var th=getAvatarStyle(themeId||S.equip);
+  el.style.background=th.bg;
+  el.style.color=th.fg;
+  if(photoUrl){
     var img=document.createElement('img');
-    img.src=url; img.onerror=function(){img.remove(); el.textContent=name.charAt(0).toUpperCase()};
+    img.src=photoUrl;
+    img.onerror=function(){img.remove();el.textContent=name.charAt(0).toUpperCase();};
     el.innerHTML=''; el.appendChild(img);
   } else {
-    el.textContent = name.charAt(0).toUpperCase();
+    el.textContent=name.charAt(0).toUpperCase();
   }
 }
 
-// ─── UI REFRESH ───────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// REFRESH UI
+// ═══════════════════════════════════════════════════════════
 function refreshUI(){
-  var g = S.gears.toLocaleString();
-  document.getElementById('sideGears').textContent = g;
-  document.getElementById('shopBal').textContent = g;
+  var g=S.gears.toLocaleString();
+  var el;
+  el=document.getElementById('sideGears'); if(el) el.textContent=g;
+  el=document.getElementById('topGears'); if(el) el.textContent=g;
+  el=document.getElementById('shopBal'); if(el) el.textContent=g;
 }
 
+// ═══════════════════════════════════════════════════════════
+// PROFILE
+// ═══════════════════════════════════════════════════════════
+var gNames={reflex:'Reflex Duel',stroop:'Color Trap',mine:'Mine Rush',blitz:'Number Blitz',snake:'Neon Snake',wave:'Wave Surf',word:'Word Rush',tap:'Tap Blitz',seq:'Sequence',mem:'Flip Match',math:'Math Sprint',dodge:'Dodge Rush'};
 function renderProfile(){
-  document.getElementById('profName').textContent = S.name;
-  document.getElementById('profId').textContent = 'ID: '+S.uid;
-  var av=document.getElementById('profAv');
-  makeAvEl(av, S.name, S.photoUrl);
-  document.getElementById('stGears').textContent = S.gears.toLocaleString();
-  document.getElementById('stGames').textContent = S.played;
-  document.getElementById('stStreak').textContent = S.streak;
-  var sd=document.getElementById('streakDays'); sd.innerHTML='';
-  S.streakDays.forEach(function(d){
-    var div=document.createElement('div'); div.className='sd'+(d?' done':''); sd.appendChild(div);
-  });
-  // History
-  var hist=document.getElementById('histList'); hist.innerHTML='';
-  if(!S.history.length){
-    hist.innerHTML='<div style="padding:16px;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center">Нет сыгранных игр</div>';
-  } else {
-    var gNames={reflex:'Reflex Duel',stroop:'Color Trap',mine:'Mine Rush',blitz:'Number Blitz',snake:'Neon Snake',wave:'Wave Surf',word:'Word Rush',tap:'Tap Blitz',seq:'Sequence',mem:'Flip Match'};
-    S.history.slice(0,8).forEach(function(h,i){
+  var el;
+  el=document.getElementById('profName'); if(el) el.textContent=S.name;
+  el=document.getElementById('profId'); if(el) el.textContent='ID: '+S.uid;
+  el=document.getElementById('stGears'); if(el) el.textContent=S.gears.toLocaleString();
+  el=document.getElementById('stGames'); if(el) el.textContent=S.played;
+  el=document.getElementById('stStreak'); if(el) el.textContent=S.streak;
+  el=document.getElementById('profAv'); if(el) setAvEl(el, S.name, S.photoUrl, S.equip);
+
+  // Best game badge
+  var bestGame=null, bestVal=0;
+  Object.keys(S.scores).forEach(function(k){if(S.scores[k]>bestVal){bestVal=S.scores[k];bestGame=k;}});
+  el=document.getElementById('profBestGame');
+  if(el&&bestGame){el.textContent='TOP: '+(gNames[bestGame]||bestGame).toUpperCase();el.style.display='inline-flex';}
+
+  // Streak
+  var streakCount=S.streakDays.filter(Boolean).length;
+  el=document.getElementById('streakFlame');
+  if(el) el.textContent=streakCount+' дн.';
+  var sd=document.getElementById('streakDays');
+  if(sd){sd.innerHTML='';S.streakDays.forEach(function(d){var div=document.createElement('div');div.className='sd'+(d?' done':'');sd.appendChild(div);});}
+
+  // Scores
+  var sc=document.getElementById('profScores');
+  if(sc){
+    sc.innerHTML='';
+    var keys=Object.keys(S.scores);
+    if(!keys.length){sc.innerHTML='<div class="lb-empty">Нет рекордов</div>';}
+    else{keys.forEach(function(k){
       var row=document.createElement('div');
-      row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border)';
-      if(i===S.history.length-1||i===7) row.style.borderBottom='none';
-      var d=new Date(h.ts);
-      var ds=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
-      row.innerHTML='<span style="font-size:13px">'+(gNames[h.game]||h.game)+'</span>'
-        +'<span style="font-family:var(--mono);font-size:11px;color:var(--muted)">'+ds+'</span>'
-        +'<span style="font-family:var(--mono);font-size:12px;color:var(--accent)">+'+h.gears+' гир</span>';
-      hist.appendChild(row);
-    });
+      row.className='lb-row';
+      row.innerHTML='<div class="lb-name">'+(gNames[k]||k)+'</div><div class="lb-sc">'+S.scores[k]+' гир</div>';
+      sc.appendChild(row);
+    });}
+  }
+
+  // History
+  var hist=document.getElementById('histList');
+  if(hist){
+    hist.innerHTML='';
+    if(!S.history.length){hist.innerHTML='<div class="lb-empty">Нет сыгранных игр</div>';}
+    else{
+      S.history.slice(0,10).forEach(function(h,i){
+        var row=document.createElement('div');
+        row.className='hist-row';
+        var d=new Date(h.ts);
+        var ts=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+        row.innerHTML='<div class="hist-game">'+(gNames[h.game]||h.game)+'</div><div class="hist-ts">'+ts+'</div><div class="hist-rew">+'+h.gears+'</div>';
+        hist.appendChild(row);
+      });
+    }
   }
 }
 
-// ─── LEADERBOARD ──────────────────────────────────────────────────────────────
-// Real: only the current user. Others only show if they've shared via URL or API.
-// We show player's own real score and placeholder rows for future players.
+// ═══════════════════════════════════════════════════════════
+// LEADERBOARD
+// ═══════════════════════════════════════════════════════════
+function buildLbRow(rank,name,photoUrl,score,isMe){
+  var div=document.createElement('div');
+  div.className='lb-row'+(isMe?' me':'')+(rank===1?' top1':'');
+  var num=document.createElement('div'); num.className='lb-num'; num.textContent='#'+rank;
+  var av=document.createElement('div'); av.className='lb-av';
+  setAvEl(av, name, isMe?photoUrl:null, isMe?S.equip:'default');
+  var nm=document.createElement('div'); nm.className='lb-name'; nm.textContent=name;
+  if(isMe){var t=document.createElement('span');t.className='lb-me-tag';t.textContent='ты';nm.appendChild(t);}
+  var sc=document.createElement('div'); sc.className='lb-sc'; sc.textContent=score;
+  div.appendChild(num);div.appendChild(av);div.appendChild(nm);div.appendChild(sc);
+  return div;
+}
 function renderGlobalLb(){
   var el=document.getElementById('globalLb'); if(!el) return;
   el.innerHTML='';
-
-  // Build real entry list — only real user here
-  var entries = [{name:S.name, gears:S.gears, av:S.name.charAt(0), photoUrl:S.photoUrl, me:true}];
-
-  entries.sort(function(a,b){return b.gears-a.gears});
-  entries.forEach(function(u,i){
-    el.appendChild(buildLbRow(i+1, u.av, u.photoUrl, u.name, u.gears.toLocaleString()+' гир', u.me));
-  });
-
-  // My rank
-  var myR = document.getElementById('myRankNum'); if(myR) myR.textContent='#1';
-  var myA = document.getElementById('myRankAv'); if(myA) makeAvEl(myA, S.name, S.photoUrl);
-  var myN = document.getElementById('myRankName'); if(myN) myN.textContent=S.name;
-  var myS = document.getElementById('myRankSc'); if(myS) myS.textContent=S.gears.toLocaleString()+' гир';
+  el.appendChild(buildLbRow(1,S.name,S.photoUrl,S.gears.toLocaleString()+' гир',true));
+  el.appendChild(emptyPlaceholder('Других игроков пока нет. Зови друзей!'));
+  var mn=document.getElementById('myRankNum'); if(mn) mn.textContent='#1';
+  var ma=document.getElementById('myRankAv'); if(ma) setAvEl(ma,S.name,S.photoUrl,S.equip);
+  var mna=document.getElementById('myRankName'); if(mna) mna.textContent=S.name;
+  var ms=document.getElementById('myRankSc'); if(ms) ms.textContent=S.gears.toLocaleString()+' гир';
 }
-
-function buildLbRow(rank, av, photoUrl, name, score, isMe){
-  var div=document.createElement('div');
-  div.className='lb-row'+(isMe?' me':'');
-  var avEl=document.createElement('div'); avEl.className='lb-av';
-  makeAvEl(avEl, av, photoUrl||null);
-  var numEl=document.createElement('div'); numEl.className='lb-num'; numEl.textContent=rank;
-  var nameEl=document.createElement('div'); nameEl.className='lb-name';
-  nameEl.textContent=name;
-  if(isMe){var tag=document.createElement('span');tag.className='lb-me-tag';tag.textContent='ты';nameEl.appendChild(tag);}
-  var scEl=document.createElement('div'); scEl.className='lb-sc'; scEl.textContent=score;
-  div.appendChild(numEl); div.appendChild(avEl); div.appendChild(nameEl); div.appendChild(scEl);
-  return div;
+function emptyPlaceholder(msg){
+  var d=document.createElement('div'); d.className='lb-empty'; d.textContent=msg; return d;
 }
-
-function renderMiniLb(game){
-  var el=document.getElementById(game+'Lb'); if(!el) return;
-  el.innerHTML='';
-  // Only real user score
+function renderGameLb(game, container){
+  if(!container) return; container.innerHTML='';
   var best=S.scores[game]||0;
-  var av=document.getElementById('profAv');
-  el.appendChild(buildLbRow(1, S.name.charAt(0), S.photoUrl, S.name, best+' гир', true));
-  if(!best) el.innerHTML='<div style="padding:14px 16px;font-family:var(--mono);font-size:11px;color:var(--muted)">Сыграй чтобы попасть в топ</div>';
+  if(best) container.appendChild(buildLbRow(1,S.name,S.photoUrl,best+' гир',true));
+  container.appendChild(emptyPlaceholder(best?'Других игроков пока нет':'Сыграй чтобы попасть в топ'));
 }
+function renderMiniLb(game){renderGameLb(game,document.getElementById(game+'Lb'));}
 
-// ─── SHOP ─────────────────────────────────────────────────────────────────────
-var shopItems=[
-  {id:'mono',   name:'Mono',    price:0,   bg:'#111',   icon:'M'},
-  {id:'neon',   name:'Neon',    price:200, bg:'#0a1a12',icon:'N'},
-  {id:'fire',   name:'Fire',    price:350, bg:'#1a0a08',icon:'F'},
-  {id:'cosmic', name:'Cosmic',  price:500, bg:'#08080f',icon:'C'},
-  {id:'hacker', name:'Hacker',  price:600, bg:'#081208',icon:'H'},
-  {id:'gold',   name:'Gold',    price:1000,bg:'#1a1200',icon:'G'},
-];
+// ═══════════════════════════════════════════════════════════
+// SHOP
+// ═══════════════════════════════════════════════════════════
 function renderShop(){
   var grid=document.getElementById('shopGrid'); if(!grid) return;
   grid.innerHTML='';
   shopItems.forEach(function(item){
     var owned=S.owned.indexOf(item.id)!==-1;
+    var isEq=S.equip===item.id;
     var div=document.createElement('div');
-    div.className='shop-item'+(owned?' owned':'');
-    div.innerHTML='<div class="shop-prev" style="background:'+item.bg+'"><span style="font-family:var(--mono);font-size:28px;font-weight:700;color:var(--accent)">'+item.icon+'</span></div>'
-      +'<div class="shop-info"><div class="shop-name">'+item.name+'</div>'
-      +(owned?'<div class="shop-owned">Куплено</div>':'<div class="shop-price">'+item.price+' гир</div>')
+    div.className='shop-item'+(owned?' owned':'')+(isEq?' active-eq':'');
+    var th=getAvatarStyle(item.id);
+    var prevStyle='background:'+th.bg+';color:'+th.fg;
+    div.innerHTML='<div class="shop-prev" style="'+prevStyle+'">'
+      +(owned?'<div class="owned-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>':'')
+      +'<span style="font-family:var(--mono);font-size:26px;font-weight:700;color:'+th.fg+'">'+S.name.charAt(0).toUpperCase()+'</span>'
+      +'</div>'
+      +'<div class="shop-info">'
+      +'<div class="shop-name">'+item.name+'</div>'
+      +'<div class="shop-desc">'+item.desc+'</div>'
+      +(owned?(isEq?'<div class="shop-equip">Активно</div>':'<div class="shop-owned">Надеть</div>'):'<div class="shop-price">'+item.price+' гир</div>')
       +'</div>';
-    div.addEventListener('click',function(){buyItem(item)});
+    div.addEventListener('click',function(){shopAction(item);});
     grid.appendChild(div);
   });
 }
-function buyItem(item){
-  if(S.owned.indexOf(item.id)!==-1){showToast('Уже куплено');return;}
-  if(S.gears<item.price){showToast('Недостаточно гир');return;}
-  S.gears-=item.price; S.owned.push(item.id); save(); refreshUI(); renderShop();
+function shopAction(item){
+  if(S.owned.indexOf(item.id)!==-1){
+    S.equip=item.id; save(); renderShop();
+    var av=document.getElementById('profAv'); if(av) setAvEl(av,S.name,S.photoUrl,S.equip);
+    showToast(item.name+' активирован');
+    return;
+  }
+  if(S.gears<item.price){showToast('Нужно ещё '+(item.price-S.gears)+' гир');return;}
+  S.gears-=item.price; S.owned.push(item.id); S.equip=item.id;
+  save(); refreshUI(); renderShop();
   showToast('Куплено: '+item.name);
 }
 
-// ═══ GAME: REFLEX ═════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// REFLEX
+// ═══════════════════════════════════════════════════════════
 var rState='idle',rStart=0,rTimer=null;
 function startReflex(){
   document.getElementById('reflexRes').style.display='none';
   rState='waiting';
   var a=document.getElementById('reflexArea');
-  a.style.background='var(--surface2)';
+  a.className='reflex-zone rz-ready';
   document.getElementById('reflexTxt').textContent='Готовься...';
-  document.getElementById('reflexTxt').style.color='var(--muted)';
   rTimer=setTimeout(function(){
-    a.style.background='rgba(232,255,0,0.05)';
+    a.className='reflex-zone rz-go';
     document.getElementById('reflexTxt').textContent='ЖМИ';
-    document.getElementById('reflexTxt').style.color='var(--accent)';
     rState='go'; rStart=Date.now();
   },1500+Math.random()*3000);
 }
 document.getElementById('reflexArea').addEventListener('click',function(){
   if(rState==='idle') return;
+  var a=document.getElementById('reflexArea');
   if(rState==='waiting'){
     clearTimeout(rTimer); rState='idle';
-    var a=document.getElementById('reflexArea');
-    a.style.background='rgba(255,64,64,0.05)';
-    document.getElementById('reflexTxt').textContent='Слишком рано';
-    document.getElementById('reflexTxt').style.color='var(--red)';
-    setTimeout(function(){a.style.background='';document.getElementById('reflexTxt').textContent='Нажми чтобы начать';document.getElementById('reflexTxt').style.color='';},1400);
+    a.className='reflex-zone rz-early';
+    document.getElementById('reflexTxt').textContent='Слишком рано!';
+    setTimeout(function(){a.className='reflex-zone rz-wait';document.getElementById('reflexTxt').textContent='Нажми чтобы начать';},1400);
     return;
   }
   if(rState==='go'){
     var ms=Date.now()-rStart; rState='idle';
-    var a=document.getElementById('reflexArea');
-    a.style.background='rgba(232,255,0,0.05)';
+    a.className='reflex-zone rz-wait';
+    document.getElementById('reflexTxt').textContent=ms+' мс';
     document.getElementById('reflexRes').style.display='block';
     document.getElementById('reflexMs').textContent=ms+' мс';
-    document.getElementById('reflexRating').textContent=ms<150?'Невероятно':ms<200?'Отлично':ms<250?'Хорошо':'Тренируйся';
-    var rew=Math.max(10,Math.floor(300/ms*30));
-    addGears(rew,'reflex');
+    document.getElementById('reflexMs').classList.add('anim-pop');
+    setTimeout(function(){document.getElementById('reflexMs').classList.remove('anim-pop');},300);
+    document.getElementById('reflexRating').textContent=ms<150?'Невероятно':ms<200?'Отлично':ms<250?'Хорошо':ms<300?'Нормально':'Тренируйся';
+    addGears(Math.max(10,Math.floor(300/ms*30)),'reflex');
   }
 });
 
-// ═══ GAME: STROOP ═════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// STROOP
+// ═══════════════════════════════════════════════════════════
 var colorData=[
-  {word:'КРАСНЫЙ',color:'#ff4040',name:'red'},
-  {word:'СИНИЙ',  color:'#4080ff',name:'blue'},
-  {word:'ЗЕЛЁНЫЙ',color:'#00e676',name:'green'},
-  {word:'ЖЁЛТЫЙ', color:'#e8ff00',name:'yellow'},
-  {word:'БЕЛЫЙ',  color:'#ffffff',name:'white'},
+  {word:'КРАСНЫЙ',color:'#ff4d6a',name:'red'},
+  {word:'СИНИЙ',  color:'#4d9fff',name:'blue'},
+  {word:'ЗЕЛЁНЫЙ',color:'#00e5a0',name:'green'},
+  {word:'ЖЁЛТЫЙ', color:'#c8ff00',name:'yellow'},
+  {word:'ФИОЛЕТ', color:'#7c6dfa',name:'purple'},
 ];
 var sScore2=0,sRound2=0,sInterval=null,sActive=false;
 function startStroop(){
@@ -945,69 +1264,63 @@ function nextStroop(){
   document.getElementById('sWord').style.color=colorData[ci].color;
   var correct=colorData[ci].name;
   var opts=[colorData[ci]];
-  while(opts.length<4){
-    var r=colorData[Math.floor(Math.random()*colorData.length)];
-    if(!opts.some(function(x){return x.name===r.name})) opts.push(r);
-  }
+  while(opts.length<4){var r=colorData[Math.floor(Math.random()*colorData.length)];if(!opts.some(function(x){return x.name===r.name}))opts.push(r);}
   opts.sort(function(){return Math.random()-.5});
-  var el=document.getElementById('sOpts'); el.innerHTML='';
+  var el=document.getElementById('sOpts');el.innerHTML='';
   opts.forEach(function(opt){
-    var btn=document.createElement('button');
-    btn.className='stroop-opt';
-    btn.textContent=opt.word;
-    btn.style.color=opt.color;
+    var btn=document.createElement('button');btn.className='stroop-opt';
+    btn.textContent=opt.word;btn.style.color=opt.color;
     btn.addEventListener('click',function(){answerStroop(opt.name===correct,btn)});
     el.appendChild(btn);
   });
-  clearInterval(sInterval);
-  var tv=100;
+  clearInterval(sInterval);var tv=100;
   document.getElementById('sTimer').style.width='100%';
-  sInterval=setInterval(function(){
-    tv-=2; document.getElementById('sTimer').style.width=tv+'%';
-    if(tv<=0){clearInterval(sInterval);answerStroop(false,null);}
-  },60);
+  sInterval=setInterval(function(){tv-=2;document.getElementById('sTimer').style.width=tv+'%';if(tv<=0){clearInterval(sInterval);answerStroop(false,null);}},60);
 }
 function answerStroop(ok,btn){
-  clearInterval(sInterval); if(!sActive) return;
-  document.querySelectorAll('#sOpts .stroop-opt').forEach(function(b){b.onclick=null});
-  if(btn) btn.className='stroop-opt '+(ok?'ok':'bad');
-  if(ok) sScore2+=100;
+  clearInterval(sInterval);if(!sActive)return;
+  document.querySelectorAll('#sOpts .stroop-opt').forEach(function(b){b.onclick=null;});
+  if(btn)btn.className='stroop-opt '+(ok?'ok':'bad');
+  if(ok)sScore2+=100;
   setTimeout(nextStroop,350);
 }
 function endStroop(){
   sActive=false;
   document.getElementById('sEnd').style.display='block';
   document.getElementById('sFinalScore').textContent=sScore2;
+  document.getElementById('sFinalScore').classList.add('anim-pop');
   document.getElementById('sStartBtn').style.display='block';
   addGears(Math.floor(sScore2/10),'stroop');
 }
 
-// ═══ GAME: MINE ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// MINE
+// ═══════════════════════════════════════════════════════════
 var mActive=false,mMult=1,mBombs=[],mRevealed=[];
 function startMine(){
-  mActive=true;mMult=1;mRevealed=[];
-  mBombs=[];
-  while(mBombs.length<5){ var b=Math.floor(Math.random()*25); if(mBombs.indexOf(b)===-1) mBombs.push(b); }
+  mActive=true;mMult=1;mRevealed=[];mBombs=[];
+  while(mBombs.length<5){var b=Math.floor(Math.random()*25);if(mBombs.indexOf(b)===-1)mBombs.push(b);}
   document.getElementById('mMulti').textContent='1.00x';
   document.getElementById('mPot').textContent=10;
   document.getElementById('mCash').disabled=true;
-  var grid=document.getElementById('mGrid'); grid.innerHTML='';
+  var grid=document.getElementById('mGrid');grid.innerHTML='';
   for(var i=0;i<25;i++){(function(idx){
-    var c=document.createElement('div'); c.className='mcell'; c.textContent='?';
+    var c=document.createElement('div');c.className='mcell';c.textContent='·';
     c.addEventListener('click',function(){tapMine(idx,c)});
     grid.appendChild(c);
   })(i);}
 }
 function tapMine(idx,cell){
-  if(!mActive||mRevealed.indexOf(idx)!==-1) return;
-  mRevealed.push(idx); cell.classList.add('revealed');
-  cell.onclick=null;
+  if(!mActive||mRevealed.indexOf(idx)!==-1)return;
+  mRevealed.push(idx);cell.onclick=null;
+  cell.classList.add('anim-pop');
   if(mBombs.indexOf(idx)!==-1){
-    cell.className='mcell boom revealed'; cell.textContent='X';
-    mActive=false; document.getElementById('mCash').disabled=true;
+    cell.className='mcell boom revealed anim-pop';cell.textContent='X';
+    mActive=false;document.getElementById('mCash').disabled=true;
+    cell.classList.add('anim-shake');
     showToast('Мина! Игра окончена');
   } else {
-    cell.className='mcell safe revealed'; cell.textContent='+';
+    cell.className='mcell safe revealed';cell.textContent='+';
     mMult=Math.round((1+mRevealed.length*0.18)*100)/100;
     document.getElementById('mMulti').textContent=mMult.toFixed(2)+'x';
     document.getElementById('mPot').textContent=Math.floor(10*mMult);
@@ -1015,84 +1328,86 @@ function tapMine(idx,cell){
   }
 }
 function cashMine(){
-  if(!mActive) return;
-  mActive=false; document.getElementById('mCash').disabled=true;
-  var won=Math.floor(10*mMult);
-  addGears(won,'mine');
+  if(!mActive)return;mActive=false;document.getElementById('mCash').disabled=true;
+  var won=Math.floor(10*mMult);addGears(won,'mine');
 }
 
-// ═══ GAME: BLITZ ══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// BLITZ
+// ═══════════════════════════════════════════════════════════
 var bTarget=0,bAttempts=0,bActive=false;
 function startBlitz(){
-  bTarget=Math.floor(Math.random()*100)+1; bAttempts=0; bActive=true;
+  bTarget=Math.floor(Math.random()*100)+1;bAttempts=0;bActive=true;
   document.getElementById('bInp').value='';
   document.getElementById('bAtt').textContent='0';
   document.getElementById('bHint').textContent='Начинай';
-  document.getElementById('bHint').className='';
+  document.getElementById('bHint').className='hint-val';
 }
 function guessBlitz(){
   if(!bActive){startBlitz();return;}
   var val=parseInt(document.getElementById('bInp').value);
   if(isNaN(val)||val<1||val>100){showToast('Введи число 1–100');return;}
-  bAttempts++; document.getElementById('bAtt').textContent=bAttempts;
+  bAttempts++;document.getElementById('bAtt').textContent=bAttempts;
   document.getElementById('bInp').value='';
-  var diff=Math.abs(val-bTarget), hEl=document.getElementById('bHint');
+  var diff=Math.abs(val-bTarget),hEl=document.getElementById('bHint');
   if(val===bTarget){
-    bActive=false; hEl.textContent='Угадал!'; hEl.className='hint-warm';
-    var rew=Math.max(10,100-bAttempts*8);
-    addGears(rew,'blitz');
-  } else if(diff<=5){hEl.textContent='Горячо';hEl.className='hint-hot';}
-  else if(diff<=15){hEl.textContent='Тепло';hEl.className='hint-warm';}
-  else{hEl.textContent='Холодно';hEl.className='hint-cold';}
+    bActive=false;hEl.textContent='Угадал!';hEl.className='hint-val hint-warm';
+    var rew=Math.max(10,100-bAttempts*8);addGears(rew,'blitz');
+    document.getElementById('bInp').classList.add('anim-pop');
+  } else if(diff<=5){hEl.textContent='Горячо';hEl.className='hint-val hint-hot';}
+  else if(diff<=15){hEl.textContent='Тепло';hEl.className='hint-val hint-warm';}
+  else{hEl.textContent='Холодно';hEl.className='hint-val hint-cold';}
 }
-document.getElementById('bInp').addEventListener('keydown',function(e){if(e.key==='Enter')guessBlitz()});
+document.getElementById('bInp').addEventListener('keydown',function(e){if(e.key==='Enter')guessBlitz();});
 
-// ═══ GAME: SNAKE ══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// SNAKE
+// ═══════════════════════════════════════════════════════════
 var snLoop=null,snDir={x:1,y:0},snNextDir={x:1,y:0};
-function resizeSnake(){
-  var c=document.getElementById('snakeCanvas');
-  var w=c.parentElement.offsetWidth; c.width=w; c.height=w;
-}
+function resizeSnake(){var c=document.getElementById('snakeCanvas');var w=c.parentElement.offsetWidth;c.width=w;c.height=w;}
 function startSnake(){
-  stopSnake(); resizeSnake();
-  var canvas=document.getElementById('snakeCanvas');
-  var ctx=canvas.getContext('2d');
+  stopSnake();resizeSnake();
+  var canvas=document.getElementById('snakeCanvas'),ctx=canvas.getContext('2d');
   var CELL=16,COLS=Math.floor(canvas.width/CELL),ROWS=Math.floor(canvas.height/CELL);
   var snake=[{x:Math.floor(COLS/2),y:Math.floor(ROWS/2)}];
   snDir={x:1,y:0};snNextDir={x:1,y:0};
   var food={x:5,y:5},score=0;
   function pf(){do{food={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}}while(snake.some(function(s){return s.x===food.x&&s.y===food.y}))}
   pf();
+  var th=getAvatarStyle(S.equip);
   function draw(){
-    ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle='#e8ff00'; ctx.shadowBlur=8; ctx.shadowColor='#e8ff00';
+    ctx.fillStyle='#080810';ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle=th.fg;ctx.shadowBlur=10;ctx.shadowColor=th.fg;
     ctx.beginPath();ctx.arc(food.x*CELL+CELL/2,food.y*CELL+CELL/2,CELL/2-2,0,Math.PI*2);ctx.fill();
     ctx.shadowBlur=0;
     snake.forEach(function(s,i){
-      ctx.fillStyle=i===snake.length-1?'#f0f0f0':'rgba(240,240,240,'+(0.3+i/snake.length*.7)+')';
+      var a=0.3+i/snake.length*0.7;
+      ctx.fillStyle=i===snake.length-1?th.fg:'rgba('+hexR(th.fg)+','+a+')';
       ctx.fillRect(s.x*CELL+1,s.y*CELL+1,CELL-2,CELL-2);
     });
+  }
+  function hexR(hex){
+    try{var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return r+','+g+','+b;}catch(e){return '200,255,0';}
   }
   function step(){
     snDir={x:snNextDir.x,y:snNextDir.y};
     var head={x:snake[snake.length-1].x+snDir.x,y:snake[snake.length-1].y+snDir.y};
     if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS||snake.some(function(s){return s.x===head.x&&s.y===head.y})){
       var best=parseInt(localStorage.getItem('snBest')||'0');
-      if(score>best){best=score;localStorage.setItem('snBest',best)}
+      if(score>best){best=score;localStorage.setItem('snBest',best);}
       document.getElementById('snBest').textContent=best;
       addGears(score*2,'snake');
       ctx.fillStyle='rgba(0,0,0,.8)';ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle='#f0f0f0';ctx.font='bold 16px "IBM Plex Mono",monospace';ctx.textAlign='center';
+      ctx.fillStyle=th.fg;ctx.font='bold 16px "Space Mono",monospace';ctx.textAlign='center';
       ctx.fillText('GAME OVER',canvas.width/2,canvas.height/2-8);
-      ctx.fillStyle='#555';ctx.font='12px "IBM Plex Mono",monospace';
+      ctx.fillStyle='#5a5a80';ctx.font='12px "Space Mono",monospace';
       ctx.fillText('Счёт: '+score,canvas.width/2,canvas.height/2+14);
       return;
     }
     snake.push(head);
     if(head.x===food.x&&head.y===food.y){score++;document.getElementById('snScore').textContent=score;pf();}
     else snake.shift();
-    draw();
-    snLoop=setTimeout(step,110);
+    draw();snLoop=setTimeout(step,110);
   }
   draw();snLoop=setTimeout(step,110);
   document.getElementById('snBest').textContent=localStorage.getItem('snBest')||'0';
@@ -1100,13 +1415,19 @@ function startSnake(){
 function stopSnake(){if(snLoop){clearTimeout(snLoop);snLoop=null;}}
 function setSnDir(x,y){if(x!==0&&snDir.x!==0)return;if(y!==0&&snDir.y!==0)return;snNextDir={x:x,y:y};}
 ['Up','Down','Left','Right'].forEach(function(d){
-  var dx=d==='Right'?1:d==='Left'?-1:0, dy=d==='Down'?1:d==='Up'?-1:0;
+  var dx=d==='Right'?1:d==='Left'?-1:0,dy=d==='Down'?1:d==='Up'?-1:0;
   var el=document.getElementById('d'+d);
-  el.addEventListener('click',function(){setSnDir(dx,dy)});
-  el.addEventListener('touchstart',function(e){e.preventDefault();setSnDir(dx,dy)},{passive:false});
+  el.addEventListener('click',function(){setSnDir(dx,dy);});
+  el.addEventListener('touchstart',function(e){e.preventDefault();setSnDir(dx,dy);},{passive:false});
+});
+document.addEventListener('keydown',function(e){
+  var m={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]};
+  var d=m[e.key];if(d){e.preventDefault();setSnDir(d[0],d[1]);}
 });
 
-// ═══ GAME: WAVE ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// WAVE
+// ═══════════════════════════════════════════════════════════
 var wAnim=null,wHolding=false,wT=0,wAlive=false,wTime=0,wLastT=0;
 function resizeWave(){var c=document.getElementById('waveCanvas');c.width=c.parentElement.offsetWidth;}
 function startWave(){
@@ -1115,35 +1436,35 @@ function startWave(){
   document.getElementById('wStartBtn').style.display='none';
   document.getElementById('wScore').textContent='0.0s';
   var canvas=document.getElementById('waveCanvas'),ctx=canvas.getContext('2d');
-  var W=canvas.width,H=canvas.height,py=H/2;
-  wLastT=performance.now();
+  var W=canvas.width,H=canvas.height,py=H/2;wLastT=performance.now();
   function getWY(t,x){return H/2+Math.sin(t*2+x/40)*32+Math.sin(t*3.1+x/25)*12;}
   function frame(now){
     var dt=(now-wLastT)/1000;wLastT=now;wT+=dt;
-    ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#080810';ctx.fillRect(0,0,W,H);
     ctx.beginPath();ctx.moveTo(0,H);
     for(var x=0;x<=W;x+=4)ctx.lineTo(x,getWY(wT,x));
     ctx.lineTo(W,H);ctx.closePath();
-    ctx.fillStyle='rgba(64,128,255,0.08)';ctx.fill();
+    ctx.fillStyle='rgba(77,159,255,0.1)';ctx.fill();
     ctx.beginPath();ctx.moveTo(0,getWY(wT,0));
     for(var x=0;x<=W;x+=4)ctx.lineTo(x,getWY(wT,x));
-    ctx.strokeStyle='rgba(64,128,255,0.6)';ctx.lineWidth=1.5;ctx.stroke();
-    var tgt=getWY(wT,60)-12;
-    if(wHolding)py+=(tgt-py)*.15;else py+=3;
+    ctx.strokeStyle='rgba(77,159,255,0.7)';ctx.lineWidth=1.5;ctx.stroke();
+    var tgt=getWY(wT,60)-14;
+    if(wHolding)py+=(tgt-py)*.14;else py+=3;
     var wy=getWY(wT,60);
     if(py>wy||py>H-8)wAlive=false;
-    ctx.fillStyle='#e8ff00';
+    var th=getAvatarStyle(S.equip);
+    ctx.fillStyle=th.fg;ctx.shadowBlur=12;ctx.shadowColor=th.fg;
     ctx.beginPath();ctx.arc(60,py,6,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
     if(wAlive){
-      wTime+=dt;
-      document.getElementById('wScore').textContent=wTime.toFixed(1)+'s';
+      wTime+=dt;document.getElementById('wScore').textContent=wTime.toFixed(1)+'s';
       wAnim=requestAnimationFrame(frame);
     } else {
-      ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(0,0,W,H);
-      ctx.fillStyle='#f0f0f0';ctx.font='bold 16px "IBM Plex Mono",monospace';ctx.textAlign='center';
-      ctx.fillText('ВЫЛЕТЕЛ',W/2,H/2-8);
-      ctx.fillStyle='#555';ctx.font='11px "IBM Plex Mono",monospace';
-      ctx.fillText(wTime.toFixed(1)+' секунд',W/2,H/2+16);
+      ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(0,0,W,H);
+      ctx.fillStyle=th.fg;ctx.font='bold 16px "Space Mono",monospace';ctx.textAlign='center';
+      ctx.fillText('ВЫЛЕТЕЛ',W/2,H/2-10);
+      ctx.fillStyle='#5a5a80';ctx.font='11px "Space Mono",monospace';
+      ctx.fillText(wTime.toFixed(1)+' секунд',W/2,H/2+14);
       document.getElementById('wStartBtn').style.display='block';
       addGears(Math.floor(wTime*3),'wave');
     }
@@ -1155,9 +1476,11 @@ function startWave(){
 }
 function stopWave(){if(wAnim){cancelAnimationFrame(wAnim);wAnim=null;}wAlive=false;}
 
-// ═══ GAME: WORD ═══════════════════════════════════════════════════════════════
-var WORDS=['СОЛНЦЕ','ЗВЕЗДА','НЕБО','ОБЛАКО','ДОЖДЬ','ОГОНЬ','ЗЕМЛЯ','МОРЕ','ЛЕТО','ОСЕНЬ','ЗИМА','ВЕСНА'];
-var VALID_W={};['СОЛНЦЕ','ЗВЕЗДА','НЕБО','ОБЛАКО','ДОЖДЬ','ОГОНЬ','ЗЕМЛЯ','МОРЕ','ЛЕТО','ОСЕНЬ','ЗИМА','ВЕСНА','КОТ','ДОМ','НОС','РОТ','РАК','ЛУК','МАК','ЛЕС','ЛЕД','СОН','КОН','ТОН','СОНЕТ','ЗНАК','НОТА','ЛЕНЬ','ЗОНТ','ОСЕЛ','ЛОЗА','ЗАЛОМ','НОБЕЛ','СТОК'].forEach(function(w){VALID_W[w]=1;});
+// ═══════════════════════════════════════════════════════════
+// WORD RUSH
+// ═══════════════════════════════════════════════════════════
+var WORDS_LIST=['СОЛНЦЕ','ЗВЕЗДА','НЕБО','ОБЛАКО','ДОЖДЬ','ОГОНЬ','ЗЕМЛЯ','МОРЕ','ЛЕТО','ОСЕНЬ','ЗИМА','ВЕСНА'];
+var VALID_W={};['СОЛНЦЕ','ЗВЕЗДА','НЕБО','ОБЛАКО','ДОЖДЬ','ОГОНЬ','ЗЕМЛЯ','МОРЕ','ЛЕТО','ОСЕНЬ','ЗИМА','ВЕСНА','КОТ','ДОМ','НОС','РОТ','РАК','ЛУК','МАК','ЛЕС','ЛЕД','СОН','КОН','ТОН','СОНЕТ','ЗНАК','НОТА','ЛЕНЬ','ЗОНТ','ОСЕЛ','ЛОЗА','ЗАЛОМ','СТОК','РОК','ДОК','ЗОБ','БОБ','КОБ'].forEach(function(w){VALID_W[w]=1;});
 var wdScore2=0,wdTimer2=60,wdInt=null,wdLetters2=[],wdSel=[],wdActive=false,wdUsed={};
 function startWord(){
   clearInterval(wdInt);wdScore2=0;wdTimer2=60;wdUsed={};wdActive=true;
@@ -1166,11 +1489,11 @@ function startWord(){
   genWordLetters();
   wdInt=setInterval(function(){
     wdTimer2--;document.getElementById('wdTimer').textContent=wdTimer2+'s';
-    if(wdTimer2<=0){clearInterval(wdInt);wdActive=false;addGears(wdScore2,'word');}
+    if(wdTimer2<=0){clearInterval(wdInt);wdActive=false;addGears(wdScore2,'word');showToast('Итог: '+wdScore2+' очков');}
   },1000);
 }
 function genWordLetters(){
-  var base=WORDS[Math.floor(Math.random()*WORDS.length)].split('');
+  var base=WORDS_LIST[Math.floor(Math.random()*WORDS_LIST.length)].split('');
   var extra='АЕИОУТРПСНКМДЗЛВБХЖЦЧ'.split('');
   for(var i=0;i<3;i++)base.push(extra[Math.floor(Math.random()*extra.length)]);
   base.sort(function(){return Math.random()-.5});
@@ -1182,184 +1505,283 @@ function renderWordLetters(){
     var t=document.createElement('div');
     t.className='ltile'+(wdSel.indexOf(i)!==-1?' sel':'');
     t.textContent=l;
-    t.addEventListener('click',function(){toggleLtr(i)});
+    t.addEventListener('click',function(){toggleLtr(i);});
     el.appendChild(t);
   });
 }
-function toggleLtr(i){
-  if(!wdActive)return;
-  var idx=wdSel.indexOf(i);
-  if(idx!==-1)wdSel.splice(idx,1);else wdSel.push(i);
-  renderWordLetters();updateWordDisp();
-}
-function updateWordDisp(){
-  var w=wdSel.map(function(i){return wdLetters2[i];}).join('');
-  var el=document.getElementById('wdDisp');
-  el.textContent=w||'_ _ _ _';el.className='word-disp';
-}
+function toggleLtr(i){if(!wdActive)return;var idx=wdSel.indexOf(i);if(idx!==-1)wdSel.splice(idx,1);else wdSel.push(i);renderWordLetters();updateWordDisp();}
+function updateWordDisp(){var w=wdSel.map(function(i){return wdLetters2[i];}).join('');var el=document.getElementById('wdDisp');el.textContent=w||'_ _ _ _';el.className='word-disp';}
 function clearWord(){wdSel=[];renderWordLetters();updateWordDisp();}
 function submitWord(){
   if(!wdActive||wdSel.length<2)return;
   var w=wdSel.map(function(i){return wdLetters2[i];}).join('');
   var el=document.getElementById('wdDisp');
-  if(wdUsed[w]){el.className='word-disp bad';showToast('Уже использовано');setTimeout(function(){el.className='word-disp';},500);return;}
-  if(VALID_W[w]){wdUsed[w]=1;var pts=w.length*20;wdScore2+=pts;document.getElementById('wdScore').textContent=wdScore2;el.className='word-disp ok';showToast('+'+pts+' очков');setTimeout(genWordLetters,500);}
-  else{el.className='word-disp bad';showToast('Нет такого слова');setTimeout(function(){el.className='word-disp';},500);}
+  if(wdUsed[w]){el.className='word-disp bad';el.classList.add('anim-shake');setTimeout(function(){el.className='word-disp';},500);showToast('Уже использовано');return;}
+  if(VALID_W[w]){wdUsed[w]=1;var pts=w.length*20;wdScore2+=pts;document.getElementById('wdScore').textContent=wdScore2;el.className='word-disp ok';el.classList.add('anim-pop');showToast('+'+pts+' очков');setTimeout(genWordLetters,450);}
+  else{el.className='word-disp bad';el.classList.add('anim-shake');setTimeout(function(){el.className='word-disp';},500);showToast('Нет такого слова');}
 }
 function stopWord(){clearInterval(wdInt);wdActive=false;}
 
-// ═══ GAME: TAP ════════════════════════════════════════════════════════════════
-var tapCount=0,tapActive=false,tapTimer=null,tapDur=10;
+// ═══════════════════════════════════════════════════════════
+// TAP BLITZ
+// ═══════════════════════════════════════════════════════════
+var tapCount=0,tapActive=false,tapTimer=null,tapDur=10,tapElapsed=0;
 function resetTap(){
-  tapCount=0;tapActive=false;clearInterval(tapTimer);
+  tapCount=0;tapActive=false;clearInterval(tapTimer);tapElapsed=0;
   document.getElementById('tapCount').textContent='0';
   document.getElementById('tapSub').textContent='НАЖМИ ЧТОБЫ НАЧАТЬ';
   document.getElementById('tapBar').style.width='100%';
 }
-function startTap(){resetTap();}
 function doTap(){
   if(!tapActive){
-    tapActive=true;tapCount=0;var elapsed=0;
+    tapActive=true;tapCount=0;tapElapsed=0;
     tapTimer=setInterval(function(){
-      elapsed++;
-      document.getElementById('tapBar').style.width=((tapDur-elapsed)/tapDur*100)+'%';
-      if(elapsed>=tapDur){
+      tapElapsed++;
+      document.getElementById('tapBar').style.width=((tapDur-tapElapsed)/tapDur*100)+'%';
+      if(tapElapsed>=tapDur){
         clearInterval(tapTimer);tapActive=false;
-        document.getElementById('tapSub').textContent='Результат: '+tapCount+' тапов';
+        document.getElementById('tapSub').textContent=tapCount+' ТАП / '+tapDur+'СЕК';
         addGears(Math.floor(tapCount/2),'tap');
       }
     },1000);
   }
-  if(!tapActive) return;
+  if(!tapActive)return;
   tapCount++;
-  document.getElementById('tapCount').textContent=tapCount;
-  document.getElementById('tapSub').textContent='тапов в секунду: '+document.getElementById('tapSub').textContent;
-  document.getElementById('tapSub').textContent=(tapCount/Math.max(1,tapDur-10+1)).toFixed(1)+' / сек';
+  var el=document.getElementById('tapCount');
+  el.textContent=tapCount;
+  el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');
+  document.getElementById('tapSub').textContent=tapElapsed>0?(tapCount/tapElapsed).toFixed(1)+' / СЕК':'TAP!';
 }
 function stopTap(){clearInterval(tapTimer);tapActive=false;}
 
-// ═══ GAME: SEQUENCE ═══════════════════════════════════════════════════════════
-var seqColors=['#ff4040','#4080ff','#00e676','#e8ff00'];
+// ═══════════════════════════════════════════════════════════
+// SEQUENCE
+// ═══════════════════════════════════════════════════════════
+var seqColors=['#ff4d6a','#4d9fff','#00e5a0','#c8ff00'];
 var seqLabels=['A','B','C','D'];
 var seqSeq=[],seqPlayer=[],seqLevel=0,seqWaiting=false;
 function buildSeqGrid(){
   var grid=document.getElementById('seqGrid');grid.innerHTML='';
   seqColors.forEach(function(c,i){
-    var btn=document.createElement('div');
-    btn.className='seq-btn';
-    btn.style.cssText='background:'+hexAlpha(c,0.15)+';border-color:'+hexAlpha(c,0.3)+';color:'+c;
-    btn.textContent=seqLabels[i];
+    var btn=document.createElement('div');btn.className='seq-btn';
     btn.id='sb'+i;
-    btn.addEventListener('click',function(){seqPress(i)});
+    btn.textContent=seqLabels[i];
+    btn.style.cssText='background:'+alpha(c,0.12)+';border-color:'+alpha(c,0.25)+';color:'+c;
+    btn.addEventListener('click',function(){seqPress(i);});
     grid.appendChild(btn);
   });
 }
-function hexAlpha(hex,a){
-  var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
-  return 'rgba('+r+','+g+','+b+','+a+')';
-}
-function startSeq(){
-  seqSeq=[];seqPlayer=[];seqLevel=0;
-  document.getElementById('seqLevel').textContent=0;
-  document.getElementById('seqStatus').textContent='Смотри...';
-  nextSeqRound();
-}
+function alpha(hex,a){try{var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return 'rgba('+r+','+g+','+b+','+a+')';}catch(e){return 'rgba(200,200,200,'+a+')';}}
+function startSeq(){seqSeq=[];seqPlayer=[];seqLevel=0;nextSeqRound();}
 function nextSeqRound(){
   seqLevel++;seqPlayer=[];
   document.getElementById('seqLevel').textContent=seqLevel;
   document.getElementById('seqStatus').textContent='Смотри...';
-  seqSeq.push(Math.floor(Math.random()*4));
-  seqWaiting=false;
-  playSeq(0);
+  seqSeq.push(Math.floor(Math.random()*4));seqWaiting=false;playSeq(0);
 }
 function playSeq(i){
   if(i>=seqSeq.length){seqWaiting=true;document.getElementById('seqStatus').textContent='Твоя очередь';return;}
-  var btn=document.getElementById('sb'+seqSeq[i]);
+  var idx=seqSeq[i];var btn=document.getElementById('sb'+idx);
   setTimeout(function(){
-    btn.classList.add('flash');
-    btn.style.background=hexAlpha(seqColors[seqSeq[i]],0.7);
-    setTimeout(function(){
-      btn.classList.remove('flash');
-      btn.style.background=hexAlpha(seqColors[seqSeq[i]],0.15);
-      playSeq(i+1);
-    },450);
-  },i===0?500:100);
+    btn.classList.add('lit');btn.style.background=alpha(seqColors[idx],0.7);
+    setTimeout(function(){btn.classList.remove('lit');btn.style.background=alpha(seqColors[idx],0.12);playSeq(i+1);},400);
+  },i===0?500:i*500);
 }
 function seqPress(idx){
   if(!seqWaiting)return;
   var btn=document.getElementById('sb'+idx);
-  btn.style.background=hexAlpha(seqColors[idx],0.5);
-  setTimeout(function(){btn.style.background=hexAlpha(seqColors[idx],0.15);},200);
+  btn.style.background=alpha(seqColors[idx],0.5);
+  btn.classList.add('anim-pop');
+  setTimeout(function(){btn.style.background=alpha(seqColors[idx],0.12);btn.classList.remove('anim-pop');},200);
   seqPlayer.push(idx);
   if(seqPlayer[seqPlayer.length-1]!==seqSeq[seqPlayer.length-1]){
-    seqWaiting=false;
-    document.getElementById('seqStatus').textContent='Ошибка!';
-    addGears(seqLevel*5,'seq');
-    return;
+    seqWaiting=false;document.getElementById('seqStatus').textContent='Ошибка — уровень '+seqLevel;
+    addGears(seqLevel*5,'seq');return;
   }
-  if(seqPlayer.length===seqSeq.length){
-    seqWaiting=false;
-    document.getElementById('seqStatus').textContent='Верно!';
-    setTimeout(nextSeqRound,800);
-  }
+  if(seqPlayer.length===seqSeq.length){seqWaiting=false;document.getElementById('seqStatus').textContent='Верно!';setTimeout(nextSeqRound,700);}
 }
 
-// ═══ GAME: FLIP MATCH ═════════════════════════════════════════════════════════
-var memEmoji=['cat','dog','star','moon','sun','fire','leaf','wave'];
-var memSymbols=['\u25A0','\u25B2','\u25C6','\u25CF','\u25A1','\u25B3','\u25C7','\u25CB'];
+// ═══════════════════════════════════════════════════════════
+// FLIP MATCH
+// ═══════════════════════════════════════════════════════════
+var memSymbols=['■','▲','◆','●','□','△','◇','○'];
 var memCards=[],memFlipped=[],memMatched=[],memMoves2=0,memPairs2=0,memLock=false;
 function startMem(){
-  var pool=[];
-  memSymbols.forEach(function(s){pool.push(s,s)});
-  pool.sort(function(){return Math.random()-.5});
+  var pool=[];memSymbols.forEach(function(s){pool.push(s,s);});pool.sort(function(){return Math.random()-.5;});
   memCards=pool;memFlipped=[];memMatched=[];memMoves2=0;memPairs2=0;memLock=false;
-  document.getElementById('memMoves').textContent=0;
-  document.getElementById('memPairs').textContent=0;
+  document.getElementById('memMoves').textContent=0;document.getElementById('memPairs').textContent=0;
   renderMemGrid();
 }
 function renderMemGrid(){
   var grid=document.getElementById('memGrid');grid.innerHTML='';
   memCards.forEach(function(sym,i){
     var card=document.createElement('div');
-    card.className='mem-card'+(memMatched.indexOf(i)!==-1?' matched flipped':memFlipped.indexOf(i)!==-1?' flipped':'');
-    card.style.cssText='font-family:var(--mono);font-size:22px;font-weight:700;color:'+(memMatched.indexOf(i)!==-1?'var(--green)':'var(--accent)');
-    card.textContent=(memFlipped.indexOf(i)!==-1||memMatched.indexOf(i)!==-1)?sym:'?';
-    card.addEventListener('click',function(){flipMem(i,sym)});
+    var isFlipped=memFlipped.indexOf(i)!==-1;var isMatched=memMatched.indexOf(i)!==-1;
+    card.className='mem-card'+(isMatched?' matched flipped':isFlipped?' flipped':'');
+    var inner=document.createElement('div');inner.className='mc-inner';inner.textContent=sym;
+    card.appendChild(inner);
+    card.addEventListener('click',function(){flipMem(i,sym);});
     grid.appendChild(card);
   });
 }
 function flipMem(i,sym){
   if(memLock||memFlipped.indexOf(i)!==-1||memMatched.indexOf(i)!==-1)return;
-  memFlipped.push(i);
-  renderMemGrid();
+  memFlipped.push(i);renderMemGrid();
   if(memFlipped.length===2){
-    memMoves2++;document.getElementById('memMoves').textContent=memMoves2;
-    memLock=true;
+    memMoves2++;document.getElementById('memMoves').textContent=memMoves2;memLock=true;
     var a=memFlipped[0],b=memFlipped[1];
     if(memCards[a]===memCards[b]){
-      memMatched.push(a,b);memPairs2++;
-      document.getElementById('memPairs').textContent=memPairs2;
-      memFlipped=[];memLock=false;
-      renderMemGrid();
-      if(memMatched.length===16){
-        addGears(Math.max(20,200-memMoves2*5),'mem');
-        showToast('Все пары! '+memMoves2+' ходов');
-      }
-    } else {
-      setTimeout(function(){memFlipped=[];memLock=false;renderMemGrid();},900);
-    }
+      memMatched.push(a,b);memPairs2++;document.getElementById('memPairs').textContent=memPairs2;
+      memFlipped=[];memLock=false;renderMemGrid();
+      if(memMatched.length===16){addGears(Math.max(20,200-memMoves2*5),'mem');showToast('Все пары! '+memMoves2+' ходов');}
+    } else {setTimeout(function(){memFlipped=[];memLock=false;renderMemGrid();},900);}
   }
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// MATH SPRINT
+// ═══════════════════════════════════════════════════════════
+var mathQ2=0,mathSc2=0,mathActive=false,mathInt=null;
+function resetMath(){
+  mathQ2=0;mathSc2=0;mathActive=false;clearInterval(mathInt);
+  document.getElementById('mathQ').textContent=0;
+  document.getElementById('mathSc').textContent=0;
+  document.getElementById('mathEnd').style.display='none';
+  document.getElementById('mathStartBtn').style.display='block';
+  document.getElementById('mathExpr').textContent='—';
+  document.getElementById('mathOpts').innerHTML='';
+}
+function startMath(){
+  resetMath();mathActive=true;mathQ2=0;mathSc2=0;
+  document.getElementById('mathStartBtn').style.display='none';
+  nextMath();
+}
+function nextMath(){
+  if(mathQ2>=10){endMath();return;}
+  mathQ2++;document.getElementById('mathQ').textContent=mathQ2;
+  var ops=['+','-','*'];var op=ops[Math.floor(Math.random()*ops.length)];
+  var a,b,ans;
+  if(op==='+'){a=Math.floor(Math.random()*50)+1;b=Math.floor(Math.random()*50)+1;ans=a+b;}
+  else if(op==='-'){a=Math.floor(Math.random()*50)+20;b=Math.floor(Math.random()*a)+1;ans=a-b;}
+  else{a=Math.floor(Math.random()*12)+1;b=Math.floor(Math.random()*12)+1;ans=a*b;}
+  document.getElementById('mathExpr').textContent=a+' '+op+' '+b;
+  var opts=[ans];
+  while(opts.length<4){var wrong=ans+Math.floor(Math.random()*20-10);if(wrong!==ans&&opts.indexOf(wrong)===-1)opts.push(wrong);}
+  opts.sort(function(){return Math.random()-.5;});
+  var el=document.getElementById('mathOpts');el.innerHTML='';
+  clearInterval(mathInt);var tv=100;document.getElementById('mathTimer').style.width='100%';
+  mathInt=setInterval(function(){tv-=3;document.getElementById('mathTimer').style.width=tv+'%';if(tv<=0){clearInterval(mathInt);answerMath(false,null,ans);}},90);
+  opts.forEach(function(opt){
+    var btn=document.createElement('div');btn.className='math-opt';btn.textContent=opt;
+    btn.addEventListener('click',function(){answerMath(opt===ans,btn,ans);});
+    el.appendChild(btn);
+  });
+}
+function answerMath(ok,btn,ans){
+  clearInterval(mathInt);if(!mathActive)return;
+  document.querySelectorAll('#mathOpts .math-opt').forEach(function(b){
+    b.onclick=null;
+    if(parseInt(b.textContent)===ans)b.classList.add('ok');
+  });
+  if(btn&&!ok)btn.classList.add('bad');
+  if(ok)mathSc2+=100;
+  document.getElementById('mathSc').textContent=mathSc2;
+  setTimeout(nextMath,400);
+}
+function endMath(){
+  mathActive=false;
+  document.getElementById('mathEnd').style.display='block';
+  document.getElementById('mathFinal').textContent=mathSc2;
+  document.getElementById('mathFinal').classList.add('anim-pop');
+  document.getElementById('mathStartBtn').style.display='block';
+  addGears(Math.floor(mathSc2/10),'math');
+}
+
+// ═══════════════════════════════════════════════════════════
+// DODGE RUSH
+// ═══════════════════════════════════════════════════════════
+var dodgeAnim=null,dodgeAlive=false,dodgeTime=0,dodgeLT=0;
+var dodgePlayer={x:160,y:200,r:10};
+var dodgeBlocks=[];
+var dodgeMX=160,dodgeMY=200;
+
+function resizeDodge(){var c=document.getElementById('dodgeCanvas');c.width=c.parentElement.offsetWidth;}
+
+function startDodge(){
+  stopDodge();resizeDodge();
+  dodgeAlive=true;dodgeTime=0;dodgeLT=performance.now();dodgeBlocks=[];
+  var canvas=document.getElementById('dodgeCanvas'),ctx=canvas.getContext('2d');
+  var W=canvas.width,H=canvas.height;
+  dodgePlayer.x=W/2;dodgePlayer.y=H-40;dodgeMX=W/2;dodgeMY=H-40;
+  document.getElementById('dodgeStartBtn').style.display='none';
+
+  canvas.onmousemove=function(e){var r=canvas.getBoundingClientRect();dodgeMX=e.clientX-r.left;dodgeMY=e.clientY-r.top;};
+  canvas.ontouchmove=function(e){e.preventDefault();var r=canvas.getBoundingClientRect();var t=e.touches[0];dodgeMX=t.clientX-r.left;dodgeMY=t.clientY-r.top;};
+
+  var spawnTimer=0;
+  var th=getAvatarStyle(S.equip);
+
+  function frame(now){
+    var dt=(now-dodgeLT)/1000;dodgeLT=now;dodgeTime+=dt;
+    document.getElementById('dodgeTime').textContent=dodgeTime.toFixed(1)+'s';
+
+    dodgePlayer.x+=(dodgeMX-dodgePlayer.x)*0.15;
+    dodgePlayer.y+=(dodgeMY-dodgePlayer.y)*0.15;
+    dodgePlayer.x=Math.max(dodgePlayer.r,Math.min(W-dodgePlayer.r,dodgePlayer.x));
+    dodgePlayer.y=Math.max(dodgePlayer.r,Math.min(H-dodgePlayer.r,dodgePlayer.y));
+
+    spawnTimer+=dt;
+    var spawnRate=Math.max(0.3,1.2-dodgeTime*0.03);
+    if(spawnTimer>spawnRate){
+      spawnTimer=0;
+      dodgeBlocks.push({x:Math.random()*(W-30)+15,y:-20,w:20+Math.random()*30,h:20,vy:80+dodgeTime*5});
+    }
+    dodgeBlocks.forEach(function(b){b.y+=b.vy*dt;});
+    dodgeBlocks=dodgeBlocks.filter(function(b){return b.y<H+40;});
+
+    ctx.fillStyle='#080810';ctx.fillRect(0,0,W,H);
+
+    dodgeBlocks.forEach(function(b){
+      ctx.fillStyle='rgba(255,77,106,0.7)';
+      ctx.fillRect(b.x-b.w/2,b.y-b.h/2,b.w,b.h);
+      ctx.strokeStyle='rgba(255,77,106,0.4)';ctx.lineWidth=1;
+      ctx.strokeRect(b.x-b.w/2,b.y-b.h/2,b.w,b.h);
+    });
+
+    ctx.fillStyle=th.fg;ctx.shadowBlur=12;ctx.shadowColor=th.fg;
+    ctx.beginPath();ctx.arc(dodgePlayer.x,dodgePlayer.y,dodgePlayer.r,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+
+    var hit=dodgeBlocks.some(function(b){
+      return dodgePlayer.x>b.x-b.w/2-dodgePlayer.r&&dodgePlayer.x<b.x+b.w/2+dodgePlayer.r&&
+             dodgePlayer.y>b.y-b.h/2-dodgePlayer.r&&dodgePlayer.y<b.y+b.h/2+dodgePlayer.r;
+    });
+
+    if(hit||!dodgeAlive){
+      var best=parseFloat(localStorage.getItem('dgBest')||'0');
+      if(dodgeTime>best){best=dodgeTime;localStorage.setItem('dgBest',best.toFixed(1));}
+      document.getElementById('dodgeBest').textContent=parseFloat(localStorage.getItem('dgBest')||'0').toFixed(1)+'s';
+      dodgeAlive=false;
+      ctx.fillStyle='rgba(0,0,0,.8)';ctx.fillRect(0,0,W,H);
+      ctx.fillStyle=th.fg;ctx.font='bold 16px "Space Mono",monospace';ctx.textAlign='center';
+      ctx.fillText('HIT',W/2,H/2-10);
+      ctx.fillStyle='#5a5a80';ctx.font='11px "Space Mono",monospace';
+      ctx.fillText(dodgeTime.toFixed(1)+' секунд',W/2,H/2+14);
+      document.getElementById('dodgeStartBtn').style.display='block';
+      addGears(Math.floor(dodgeTime*4),'dodge');
+      return;
+    }
+    dodgeAnim=requestAnimationFrame(frame);
+  }
+  dodgeAnim=requestAnimationFrame(frame);
+  document.getElementById('dodgeBest').textContent=parseFloat(localStorage.getItem('dgBest')||'0').toFixed(1)+'s';
+}
+function stopDodge(){if(dodgeAnim){cancelAnimationFrame(dodgeAnim);dodgeAnim=null;}dodgeAlive=false;}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
 refreshUI();
-
-// Fix mine grid typo — safe to rebuild on load is fine, no need
-
-document.addEventListener('keydown',function(e){
-  var m={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]};
-  var d=m[e.key]; if(d){e.preventDefault();setSnDir(d[0],d[1]);}
-});
 </script>
 </body>
 </html>
